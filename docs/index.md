@@ -5,7 +5,7 @@ hide:
   - navigation
 ---
 
-<div style="text-align: center" markdown>
+<div style="text-align: center; margin-bottom: 3em;" markdown>
 ![Logo](imgs/logo.png){width="50%"}
 <h1 style="margin-bottom: 0.1em !important;">FlySearch: Exploring how vision-language models explore</h1>
 
@@ -223,7 +223,7 @@ and the second actions it has taken. Note the presence of the grid overlay on im
 
 ## Acknowledgements
 
-<div style="text-align: justify">
+<div style="text-align: justify; font-size: small">
 This paper has been supported by the Horizon Europe Programme (HORIZONCL4-2022-HUMAN-02) under the project "ELIAS: European Lighthouse of AI for Sustainability", GA no. 101120237. This research was funded by National Science Centre, Poland (grant no. 2023/50/E/ST6/00469 and Sonata Bis grant no 2024/54/E/ST6/00388).
 The research was supported by a grant from the Faculty of Mathematics and Computer Science under the
 Strategic Programme Excellence Initiative at Jagiellonian University. We gratefully acknowledge Polish high-performance computing infrastructure PLGrid (HPC Center: ACK Cyfronet AGH) for providing computer facilities and support within computational grant no. PLG/2024/017483. Some experiments were performed on servers purchased with funds from the Priority Research Area (Artificial Intelligence Computing Center Core Facility) under the Strategic Programme Excellence Initiative at Jagiellonian University.
@@ -245,7 +245,7 @@ Strategic Programme Excellence Initiative at Jagiellonian University. We gratefu
 
 ## Contact
 
-For questions, please open an issue on GitHub or contact Adam Pardyl (adam.pardyl &lt;at&gt; doctoral.uj.edu.pl).
+For questions, please open an issue on GitHub or contact Adam Pardyl -- adam.pardyl &lt;at&gt; doctoral.uj.edu.pl.
 
 <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between">
 <a href="https://ideas-ncbr.pl/en/" rel="noreferrer" target="_blank"><img src="imgs/orgs/ideas.png" alt="IDEAS logo" style="height: 3em; margin-top: 0.6em;"/></a>
@@ -253,4 +253,8 @@ For questions, please open an issue on GitHub or contact Adam Pardyl (adam.pardy
 <a href="https://gmum.net/" rel="noreferrer" target="_blank"><img src="imgs/orgs/gmum.png" alt="GMUM logo" style="height: 4em"/></a>
 <a href="https://en.uw.edu.pl/" rel="noreferrer" target="_blank"><img src="imgs/orgs/uw.png" alt="UW logo" style="height: 4em"/></a>
 <a href="https://nomagic.ai/" rel="noreferrer" target="_blank"><img src="imgs/orgs/nomagic.png" alt="Nomagic logo" style="height: 4em"/></a>
+</div>
+
+<div style="text-align: center; margin: 2em 0" markdown>
+[:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button } [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button } [:material-rocket: Get started](getting_started/10_setup/){ .md-button .md-button--primary }
 </div>

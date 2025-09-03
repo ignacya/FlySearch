@@ -8,7 +8,9 @@
 
 # FlySearch: Exploring how vision-language models explore
 
-This is repository contains code for the FlySearch benchmark ([arXiv link](https://arxiv.org/abs/2506.02896v2)).
+A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments. Easy for humans, hard for state-of-the-art VLMs / MLLMs.
+
+### [Leaderboard & Docs](https://flysearch.pardyl.com/) | [Paper](https://arxiv.org/abs/2506.02896)
 
 ## Abstract 
 
@@ -110,4 +112,19 @@ See `tutorials/05-custom-agents.md`.
 
 ### UE5 binary crashes 
 
-The UE5 binary can sometimes spontaneously crash. The code is designed to handle this (we've modified UnrealCV's code to do so), but in case it happens you just need to restart the script with appropriately set `continue_from` flag. Furthermore, in case where your code was terminated by `UnrealDiedException` please open an issue here with a stack trace (or email us with it).
+The UE5 binary can sometimes spontaneously crash, usually when generating new scenarios. The code is designed to handle this (we've modified UnrealCV's code to do so), but in case it happens you just need to restart the script with appropriately set `continue_from` flag. Furthermore, in case where your code was terminated by `UnrealDiedException` please open an issue here with a stack trace (or email us with it).
+
+## Citation
+If you use FlySearch in your research, please cite the following paper:
+
+```
+@misc{pardyl2025flysearch,
+  title={FlySearch: Exploring how vision-language models explore},
+  author={Adam Pardyl and Dominik Matuszek and Mateusz Przebieracz and Marek Cygan and Bartosz Zieliński and Maciej Wołczyk},
+  year={2025},
+  eprint={2506.02896},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2506.02896}, 
+}
+```

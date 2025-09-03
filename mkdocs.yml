@@ -3,6 +3,7 @@
 site_name: "FlySearch: Exploring how vision-language models explore"
 site_description: "A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments."
 site_url: https://flysearch.pardyl.com
+copyright: Copyright &copy; 2025 FlySearch authors
 theme:
   name: material
   palette:
@@ -13,9 +14,11 @@ theme:
   features:
     - navigation.instant
     - navigation.instant.progress
+    - navigation.instant.prefetch
     - navigation.tracking
     - navigation.tabs
     - navigation.path
+    - navigation.top
     - search.suggest
 plugins:
   - search
@@ -38,3 +41,15 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - md_in_html
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gmum/FlySearch
+
+nav:
+  - The benchmark: index.md
+  - Getting started:
+      - Setup: getting_started/10_setup.md
+      - Running the benchmark: getting_started/20_running.md
+      - Evaluating results: getting_started/30_evaluating.md
