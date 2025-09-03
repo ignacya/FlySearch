@@ -1,5 +1,5 @@
 ---
-title: FlySearch
+title: The benchmark
 hide:
   - toc
   - navigation

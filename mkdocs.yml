@@ -1,7 +1,8 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 
 site_name: "FlySearch: Exploring how vision-language models explore"
-site_url: https://io.pardyl.com/FlySearch
+site_description: "A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments."
+site_url: https://flysearch.pardyl.com
 theme:
   name: material
   palette:
