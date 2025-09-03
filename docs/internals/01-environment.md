@@ -151,7 +151,7 @@ pil_obj_image.show() # Objects are located at [0 0 0]
 
 After executing this code, you should see:
 
-![Sample view](images/env_image_sample.png "Sample view")
+![Sample view](../imgs/env_image_sample.png "Sample view")
 
 
 ## How to obtain scenarios?

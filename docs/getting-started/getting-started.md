@@ -1,23 +1,8 @@
-<p style="text-align: center">
-  <a href="https://arxiv.org/abs/2506.02896">
-    <img src="docs/imgs/logo.png" width="50%" alt="FlySearch" />
-  </a>
-</p>
-
----
-
-# FlySearch: Exploring how vision-language models explore
-
-This is repository contains code for the FlySearch benchmark ([arXiv link](https://arxiv.org/abs/2506.02896v2)).
-
-## Abstract 
-
-The real world is messy and unstructured. Uncovering critical information often requires active, goal-driven exploration. It remains to be seen whether Vision-Language Models (VLMs), which recently emerged as a popular zero-shot tool in many difficult tasks, can operate effectively in such conditions. In this paper, we answer this question by introducing FlySearch, a 3D, outdoor, photorealistic environment for searching and navigating to objects in complex scenes. We define three sets of scenarios with varying difficulty and observe that state-of-the-art VLMs cannot reliably solve even the simplest exploration tasks, with the gap to human performance increasing as the tasks get harder. We identify a set of central causes, ranging from vision hallucination, through context misunderstanding, to task planning failures, and we show that some of them can be addressed by finetuning. We publicly release the benchmark, scenarios, and the underlying codebase.
-
+# Getting started with FlySearch
 
 ## Dependencies
 
-We've verified that the benchmark works on Ubuntu 22.04. 
+We've verified that the benchmark works on Ubuntu 22.04 and Archlinux (2025). 
 
 ### Python environment 
 

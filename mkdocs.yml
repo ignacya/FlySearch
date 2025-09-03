@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: "FlySearch: Exploring how vision-language models explore"
+site_url: https://io.pardyl.com/FlySearch
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: blue grey
+  icon:
+    logo: material/quadcopter
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.path
+    - search.suggest
+plugins:
+  - search
+  - social
+repo_url: https://github.com/gmum/FlySearch
+repo_name: gmum/FlySearch
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - md_in_html

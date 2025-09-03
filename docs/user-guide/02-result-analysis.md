@@ -407,7 +407,7 @@ This would yield:
 
 As stated before, you can also view a matplotlib plot. They don't look great, but they may serve as a perhaps-useful ad-hoc visualisation tool.
 
-![Matplotlib plot](images/plot_result_analysis.png "Matplotlib plot")
+![Matplotlib plot](../imgs/plot_result_analysis.png "Matplotlib plot")
 
 Note: The confidence intervals provided are 95% confidence intervals.
 
@@ -566,8 +566,8 @@ if __name__ == "__main__":
 
 This will generate following charts:
 
-![Situation awareness chart](images/plot_awareness_chart.png "Situation awareness chart")
+![Situation awareness chart](../imgs/plot_awareness_chart.png "Situation awareness chart")
 
-![Trajectory chart](images/plot_trajectory_chart.png "Trajectory chart")
+![Trajectory chart](../imgs/plot_trajectory_chart.png "Trajectory chart")
 
 This concludes this part of our tutorial. If you would like to see more examples, you can check out different scripts in `analysis/` directory. Those are scripts that we've used -- they may or may not be useful to you.
