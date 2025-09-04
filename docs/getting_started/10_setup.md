@@ -18,7 +18,7 @@ Unreal Engine 5 supports Windows and MacOS as well, but we haven't tested the be
 
 ## Python environment 
 
-We suggest you use Python 3.12 and then install dependencies using `pip install -r requirements.txt`.
+We suggest you use Python 3.12 and then install dependencies using uv - pyproject and uv.lock files provided. Just use `uv run <script name>`.
 
 ## Config `.env` file 
 

@@ -1,8 +1,6 @@
-import torchvision
-import numpy as np
-import cv2
 import os
 
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -138,21 +136,3 @@ def from_pil_to_opencv(image):
 
 def from_opencv_to_pil(image):
     return Image.fromarray(image[:, :, ::-1].copy())
-
-
-def main():
-    image = cv2.imread("../data/sample_images/city2.png")
-
-    image1 = dot_matrix_two_dimensional_unreal(image, 6, 6)
-
-    cv2.imshow("Image1", image1)
-    cv2.waitKey(0)
-
-    image2 = dot_matrix_two_dimensional_unreal(image, 6, 6, drone_height=50)
-
-    cv2.imshow("Image2", image2)
-    cv2.waitKey(0)
-
-
-if __name__ == "__main__":
-    main()

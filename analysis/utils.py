@@ -1,8 +1,7 @@
-import pathlib
 import os
-import pandas as pd
-
+import pathlib
 from typing import List
+
 from analysis.run import Run
 
 

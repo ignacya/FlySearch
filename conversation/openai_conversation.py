@@ -1,12 +1,11 @@
 import base64
-import cv2
+import io
 
 from time import sleep
 from PIL import Image
 from openai import RateLimitError, Client
 
 from conversation.abstract_conversation import Conversation, Role
-from misc.cv2_and_numpy import pil_to_opencv, opencv_to_pil
 
 
 class OpenAIConversation(Conversation):
@@ -55,9 +54,9 @@ class OpenAIConversation(Conversation):
             raise Exception("Transaction not started")
 
         image = image.convert("RGB")
-        image = pil_to_opencv(image)
-        base64_image = cv2.imencode('.jpeg', image)[1].tobytes()
-        base64_image = base64.b64encode(base64_image).decode('utf-8')
+        buffer = io.BytesIO()
+        image.save(buffer, format='JPEG', quality=95)
+        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
         content = self.transaction_conversation["content"]
 

@@ -1,11 +1,10 @@
-import numpy as np
 import math
-import seaborn as sns
+from string import ascii_uppercase
 
-from string import ascii_uppercase, ascii_lowercase
+import numpy as np
+import seaborn as sns
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from analysis import Run
 
@@ -225,7 +224,6 @@ def main():
 
     visualiser.plot(ax)
     plt.show()
-
 
 
 if __name__ == '__main__':

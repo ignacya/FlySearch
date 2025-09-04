@@ -1,12 +1,11 @@
 import os
 
 from conversation import AnthropicConversation
-from anthropic import Anthropic
-
 
 
 class AnthropicFactory:
     def __init__(self, model_name):
+        from anthropic import Anthropic
         self.client = Anthropic(api_key=os.environ["ANTHROPIC_AI_KEY"])
 
         model_name = model_name.removeprefix("anthropic-")

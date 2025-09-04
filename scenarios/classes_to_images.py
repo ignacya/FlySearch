@@ -1,5 +1,4 @@
 from PIL import Image
-from typing import Dict
 
 from scenarios.city_scenario_mapper import CityScenarioMapper
 

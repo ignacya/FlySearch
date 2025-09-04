@@ -1,9 +1,8 @@
 import pathlib
-import json
+from typing import List
 
 from matplotlib import pyplot as plt
 
-from typing import List
 from analysis import Run, RunAnalyser, CriterionPlotter, load_all_runs_from_a_dir
 
 CITY_CATEGORIES = ['road_construction_site', 'crowd', 'large_trash_pile', 'fire', 'car']
@@ -50,7 +49,7 @@ def group_runs(runs: List[Run], model_name: str):
 
     stats = plotter.plot_accuracy_in_aggregated_runs(runs_aggregated_per_altitude, ax=ax,
                                                      success_criterion=lambda x: RunAnalyser(
-                                                        x).success_criterion_satisfied(10, check_claimed=True))
+                                                         x).success_criterion_satisfied(10, check_claimed=True))
 
     print(rf"\addplot[color={COLOURS[model_name]}, mark=square]")
     print(r"coordinates {")

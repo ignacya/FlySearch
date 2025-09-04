@@ -1,10 +1,9 @@
-import random
-import pandas as pd
-import os
 import math
-
+import os
 from enum import Enum
 from typing import Tuple, Any, Dict
+
+import pandas as pd
 
 from scenarios import BaseScenarioMapper
 

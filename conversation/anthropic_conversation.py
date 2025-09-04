@@ -1,16 +1,14 @@
 import base64
-import cv2
-
+import io
 from time import sleep
+
 from PIL import Image
-from anthropic import Anthropic, RateLimitError
 
 from conversation import OpenAIConversation, Role
-from misc.cv2_and_numpy import pil_to_opencv, opencv_to_pil
 
 
 class AnthropicConversation(OpenAIConversation):
-    def __init__(self, client: Anthropic, model_name: str, seed=42, max_tokens=300, temperature=0.8, top_p=1.0):
+    def __init__(self, client, model_name: str, seed=42, max_tokens=300, temperature=0.8, top_p=1.0):
         super(AnthropicConversation, self).__init__(client, model_name, seed, max_tokens, temperature, top_p)
 
         self.post_transaction_image_counter = 0
@@ -24,9 +22,9 @@ class AnthropicConversation(OpenAIConversation):
         self.add_text_message(f"Image {self.image_counter}:")
 
         image = image.convert("RGB")
-        image = pil_to_opencv(image)
-        base64_image = cv2.imencode('.jpeg', image)[1].tobytes()
-        base64_image = base64.b64encode(base64_image).decode('utf-8')
+        buffer = io.BytesIO()
+        image.save(buffer, format='JPEG', quality=95)
+        base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
         content = self.transaction_conversation["content"]
 
@@ -45,6 +43,8 @@ class AnthropicConversation(OpenAIConversation):
     def get_answer_from_openai(self, model, messages, max_tokens, seed, temperature, top_p):
         fail = True
         response = None
+
+        from anthropic import RateLimitError
 
         while fail:
             try:

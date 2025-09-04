@@ -1,5 +1,4 @@
 from typing import Tuple
-import cv2
 import numpy as np
 
 from glimpse_generators import UnrealClientWrapper
@@ -101,7 +100,7 @@ class UnrealGlimpseGenerator:
         blank = np.isclose(img, 0, atol=0.001).all()
         return not blank
 
-    def __get_img(self, rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image:
+    def __get_img(self, rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image.Image:
         start_position = self.start_position
 
         location = (start_position[0] + rel_position_m[0] * 100, start_position[1] + rel_position_m[1] * 100,
@@ -115,14 +114,11 @@ class UnrealGlimpseGenerator:
         self.client.request('vget /camera/1/lit /tmp/camera.png')
         image = Image.open('/tmp/camera.png')
         image = image.resize((500, 500), Image.Resampling.BILINEAR)
-
-        image = pil_to_opencv(image)
-        image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
-
-        return opencv_to_pil(image)
+        image = image.transpose(Image.Transpose.ROTATE_270)
+        return image
 
     def get_camera_image(self,
-                         rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image:
+                         rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image.Image:
         return self.__get_img(rel_position_m, force_move=force_move)
 
 
@@ -134,7 +130,7 @@ class UnrealGridGlimpseGenerator(UnrealGlimpseGenerator):
         self.splits_h = splits_h
 
     def get_camera_image(self,
-                         rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image:
+                         rel_position_m: Tuple[int, int, int] = (0, 0, 0), force_move=False) -> Image.Image:
         img = super().get_camera_image(rel_position_m, force_move=force_move)
         rel_position_m = self.get_relative_from_start()
         img = pil_to_opencv(img)

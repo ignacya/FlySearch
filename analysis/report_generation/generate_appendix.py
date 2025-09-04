@@ -1,9 +1,8 @@
-import os
-import sys
 import json
-import re
+import os
 import pathlib
 import shutil
+import sys
 
 from PIL import Image
 from matplotlib import pyplot as plt
@@ -152,7 +151,8 @@ def generate_report(model_displayname, path_dir, filter_func, subdir, n=2, overw
         print(preamble(model_name=preamble_name), file=file)
 
         # open simple conversation if exists, otherwise open conversation
-        filename = "simple_conversation.json" if "simple_conversation.json" in os.listdir(one_run_dir) else "conversation.json"
+        filename = "simple_conversation.json" if "simple_conversation.json" in os.listdir(
+            one_run_dir) else "conversation.json"
 
         with open(one_run_dir / filename) as f:
             conversation = json.load(f)
@@ -163,7 +163,7 @@ def generate_report(model_displayname, path_dir, filter_func, subdir, n=2, overw
                 if "user" in str(speaker).lower():
                     if speech != "image" and len(speech) < 20000:
                         if speech.strip().replace("\n", "").replace(" ", "").startswith("<Context>Youarein"):
-                            #pass  # FIXME
+                            # pass  # FIXME
                             speech = speech.split("<Objective>")[0].strip() + r" \texttt{(REST OF THE PROMPT)}"
                         print(re_speaks(speech), file=file)
                     else:
@@ -172,7 +172,7 @@ def generate_report(model_displayname, path_dir, filter_func, subdir, n=2, overw
                         Image.open(one_run_dir / f"{glimpse_count}.png").save(
                             image_dir / f"{one_run_dir.name}_{glimpse_count}.jpg")
 
-                        #shutil.copyfile(one_run_dir / f"{glimpse_count}.png",
+                        # shutil.copyfile(one_run_dir / f"{glimpse_count}.png",
                         #                image_dir / f"{one_run_dir.name}_{glimpse_count}.png")
                         glimpse_count += 1
                 else:
@@ -182,20 +182,19 @@ def generate_report(model_displayname, path_dir, filter_func, subdir, n=2, overw
 
 
 def main():
-
     with open("Gemma27b-FS2-S.tex", "w") as f:
         generate_report(
             model_displayname="Gemma 27B",
             path_dir=pathlib.Path("../../all_logs/"),
             filter_func=lambda x: RunAnalyser(x).success_criterion_satisfied(),
-            #filter_func=lambda x: True,
+            # filter_func=lambda x: True,
             file=f,
             startfrom=0,
             n=200,
             subdir="Gemma27b-FS2",
             overwrite=True
         )
-        
-    
+
+
 if __name__ == "__main__":
     main()

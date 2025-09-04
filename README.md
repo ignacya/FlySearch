@@ -23,7 +23,7 @@ We've verified that the benchmark works on Ubuntu 22.04.
 
 ### Python environment 
 
-We suggest you use Python 3.12 and then install dependencies using `pip install -r requirements.txt`.
+We suggest you use Python 3.12 and then install dependencies using uv - pyproject and uv.lock files provided. Just use `uv run <script name>`.
 
 ### `.env` file 
 

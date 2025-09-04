@@ -3,7 +3,6 @@ from typing import Dict
 
 from arg_resolvers import BaseArgResolver
 from prompts import fs1_prompt, fs2_prompt
-from rl.agents import SimpleLLMAgentFactory
 from rl.evaluation.configs import ExperimentConfig
 from rl.evaluation.experiment_runner import ExperimentRunner
 from rl.evaluation.validators import AltitudeValidatorFactory, OutOfBoundsFlightValidatorFactory, \

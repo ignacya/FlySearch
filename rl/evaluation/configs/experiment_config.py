@@ -2,8 +2,8 @@ from typing import List, Callable
 
 from rl.agents import BaseAgentFactory
 from rl.environment import BaseFlySearchEnv
-from rl.evaluation.loggers import BaseLogger, BaseLoggerFactory
-from rl.evaluation.validators import BaseValidator, BaseValidatorFactory
+from rl.evaluation.loggers import BaseLoggerFactory
+from rl.evaluation.validators import BaseValidatorFactory
 from scenarios import BaseScenarioMapper
 
 
