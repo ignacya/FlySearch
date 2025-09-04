@@ -21,6 +21,9 @@ dependencies = [
 anthropic = [
     "anthropic>=0.66.0",
 ]
+webgui = [
+    "fastapi>=0.116.1",
+]
 
 [dependency-groups]
 dev = [

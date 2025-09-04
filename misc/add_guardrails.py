@@ -4,6 +4,49 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 
+def get_system_font(size: int) -> ImageFont.FreeTypeFont:
+    """
+    Load font with priority: FONT_LOCATION env var, then NotoSerif-Bold.
+    Raises ValueError if neither is available.
+    """
+    # First priority: Check FONT_LOCATION environment variable
+    font_location = os.getenv("FONT_LOCATION")
+    if font_location:
+        if os.path.exists(font_location):
+            try:
+                return ImageFont.truetype(font_location, size)
+            except (OSError, IOError) as e:
+                raise ValueError(f"Cannot load font from FONT_LOCATION '{font_location}': {e}")
+        else:
+            raise ValueError(f"Font file specified in FONT_LOCATION does not exist: {font_location}")
+    
+    # Second priority: Try to find NotoSerif-Bold in common locations
+    noto_serif_bold_paths = [
+        "/usr/share/fonts/google-noto/NotoSerif-Bold.ttf",
+        "/usr/share/fonts/noto/NotoSerif-Bold.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSerif-Bold.ttf",
+        "/usr/share/fonts/TTF/NotoSerif-Bold.ttf",
+        "/System/Library/Fonts/NotoSerif-Bold.ttf",
+        "/Library/Fonts/NotoSerif-Bold.ttf",
+        "C:/Windows/Fonts/NotoSerif-Bold.ttf",
+    ]
+    
+    for font_path in noto_serif_bold_paths:
+        if os.path.exists(font_path):
+            try:
+                return ImageFont.truetype(font_path, size)
+            except (OSError, IOError):
+                continue
+    
+    # If neither FONT_LOCATION nor NotoSerif-Bold found, raise exception
+    raise ValueError(
+        "Cannot find required font. Please either:\n"
+        "1. Set FONT_LOCATION environment variable to point to a valid font file, or\n"
+        "2. Install NotoSerif-Bold font in a standard system location:\n"
+        f"   - {', '.join(noto_serif_bold_paths)}"
+    )
+
+
 # Taken and repurposed from https://github.com/leixy20/Scaffold/blob/main/image_processor.py
 def dot_matrix_two_dimensional(img: np.ndarray, dots_size_w, dots_size_h):
     """
@@ -25,8 +68,7 @@ def dot_matrix_two_dimensional(img: np.ndarray, dots_size_w, dots_size_h):
     cell_width = width / grid_size_w
     cell_height = height / grid_size_h
 
-    font = ImageFont.truetype("/usr/share/fonts/google-noto/NotoSerif-Bold.ttf",
-                              width // 40)  # Adjust font size if needed; default == width // 40
+    font = get_system_font(width // 40)  # Adjust font size if needed; default == width // 40
 
     count = 0
     for j in range(1, grid_size_h):
@@ -86,13 +128,7 @@ def dot_matrix_two_dimensional_unreal(img: np.ndarray, w_dots, h_dots, pixel_per
         img = img.convert('RGB')
     draw = ImageDraw.Draw(img, 'RGB')
 
-    font_location = os.getenv("FONT_LOCATION")
-
-    if font_location is None:
-        raise ValueError(
-            "Please set the FONT_LOCATION environment variable to the path of the font file, so that grid labels can be annotated.")
-
-    font = ImageFont.truetype(font_location, width // 40)  # Adjust font size if needed; default == width // 40
+    font = get_system_font(width // 40)  # Adjust font size if needed; default == width // 40
 
     pixels_per_cell_w = width / w_dots
     pixels_per_cell_h = height / h_dots

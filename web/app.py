@@ -1,4 +1,5 @@
 import base64
+import io
 import json
 import os
 import pathlib
@@ -7,17 +8,17 @@ import sys
 import time
 from typing import Optional
 
-import cv2
 import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
+from PIL import Image
 
 sys.path.insert(0, '../')
 
 from fastapi import FastAPI, Response, status
 from pydantic import BaseModel
 
-from rl.environment import MockFlySearchEnv, DroneCannotSeeTargetException, CityFlySearchEnv
-from scenarios import DefaultCityScenarioMapper, MimicScenarioMapper
+from rl.environment import DroneCannotSeeTargetException, CityFlySearchEnv
+from scenarios import DefaultCityScenarioMapper
 
 app = FastAPI()
 env = CityFlySearchEnv(throw_if_hard_config=False, max_altitude=250)
@@ -114,7 +115,14 @@ def log_info_at_finish(suspicious: bool = False):
         json.dump(complaints, f, indent=4)
 
     for i, opencv_image in enumerate(opencv_images):
-        cv2.imwrite(str(trajectory_path / f"{i}.png"), opencv_image)
+        # Convert OpenCV image (BGR) to PIL Image (RGB) using numpy
+        if len(opencv_image.shape) == 3:
+            # Convert BGR to RGB by reversing the channel order
+            rgb_image = opencv_image[:, :, ::-1]
+        else:
+            rgb_image = opencv_image
+        pil_image = Image.fromarray(rgb_image)
+        pil_image.save(str(trajectory_path / f"{i}.png"))
 
     if suspicious:
         with open(trajectory_path / "suspicious.txt", "w") as f:
@@ -155,8 +163,18 @@ async def get_observation(client_uuid: str, response: Response) -> Optional[Obse
     altitude = last_observation["altitude"]
     collision = last_observation["collision"]
 
-    base64_image = cv2.imencode('.jpeg', opencv_image)[1].tobytes()
-    base64_image = base64.b64encode(base64_image).decode('utf-8')
+    # Convert OpenCV image (BGR) to PIL Image (RGB) using numpy
+    if len(opencv_image.shape) == 3:
+        # Convert BGR to RGB by reversing the channel order
+        rgb_image = opencv_image[:, :, ::-1]
+    else:
+        rgb_image = opencv_image
+    pil_image = Image.fromarray(rgb_image)
+    
+    # Encode to JPEG using PIL
+    buffer = io.BytesIO()
+    pil_image.save(buffer, format='JPEG', quality=95)
+    base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
     collision = collision == 1
 
     return Observation(image_b64=base64_image, altitude=altitude, collision=collision)

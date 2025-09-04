@@ -40,7 +40,10 @@ class CityScenarioMapper(BaseScenarioMapper):
 
         possible_location_csv_path = os.getenv("LOCATIONS_CITY_PATH")
 
-        if possible_location_csv_path is None:
+        if possible_location_csv_path is None or possible_location_csv_path == "":
+            possible_location_csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'locations_city.csv')
+
+        if not os.path.isfile(possible_location_csv_path):
             raise ValueError(
                 "LOCATIONS_CITY_PATH environment variable must be set to the path of the locations_city.csv file")
 

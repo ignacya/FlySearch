@@ -44,7 +44,7 @@ Binaries cam be downloaded from https://doi.org/10.5281/zenodo.15428224.
 
 * setting the `CITY_BINARY_PATH` to `/your_location/simulator/CitySample/Binaries/Linux/CitySample`
 * setting the `FOREST_BINARY_PATH` to `your_location/simulator-dreamsenv/Linux/ElectricDreamsEnv/Binaries/Linux/ElectricDreamsSample`
-* setting path where logs from binaries themselves should be stored (`BINARY_LOG_PATH`) to `"/path_to_repo/FlySearch/binary_logs"` (or wherever else you want -- the directory will be created automatically)
+* setting path where logs from binaries themselves should be stored (`UNREAL_LOG_PATH`) to `"/path_to_repo/FlySearch/unreal_logs"` (or wherever else you want -- the directory will be created automatically, defaults to project root if not set)
 
 You can also verify manually that these work on your computer by
 running `./simulator/CitySample/Binaries/Linux/CitySample` or
