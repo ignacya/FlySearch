@@ -43,14 +43,3 @@ class UnrealGuardian:
     @property
     def is_alive(self):
         return self.process.poll() is None
-
-
-def main():
-    unreal_guardian = UnrealGuardian(
-        pathlib.Path(
-            "/home/anonymous/MyStuff/simulator-dreamsenv/Linux/ElectricDreamsEnv/Binaries/Linux/ElectricDreamsSample")
-    )
-
-
-if __name__ == "__main__":
-    main()

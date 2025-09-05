@@ -1,9 +1,8 @@
-import os
-
 from time import sleep
 from typing import Dict
 
-from scenarios.object_classes import BaseObjectClass, PCGClass, ForestEnvPCGClass, ForestSunClass
+from misc.unreal_utils import get_city_env_binary
+from scenarios.object_classes import BaseObjectClass, PCGClass, ForestSunClass
 
 from glimpse_generators import UnrealClientWrapper
 from rl.environment import BaseFlySearchEnv, DroneCannotSeeTargetException
@@ -16,10 +15,7 @@ class CityFlySearchEnv(BaseFlySearchEnv):
                          give_class_image=give_class_image)
 
     def get_client(self) -> UnrealClientWrapper:
-        city_binary_path = os.getenv("CITY_BINARY_PATH")
-
-        if city_binary_path is None:
-            raise ValueError("CITY_BINARY_PATH environment variable not set and required for forest scenario type.")
+        city_binary_path = get_city_env_binary()
 
         return UnrealClientWrapper(host="localhost", port=9000, unreal_binary_path=city_binary_path)
 

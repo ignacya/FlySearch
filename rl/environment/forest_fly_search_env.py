@@ -1,9 +1,8 @@
-import os
-
 from time import sleep
 from typing import Dict
 
-from scenarios.object_classes import BaseObjectClass, PCGClass, ForestEnvPCGClass, ForestSunClass
+from misc.unreal_utils import get_forest_env_binary
+from scenarios.object_classes import BaseObjectClass, ForestEnvPCGClass, ForestSunClass
 
 from glimpse_generators import UnrealClientWrapper
 from rl.environment import BaseFlySearchEnv
@@ -14,10 +13,7 @@ class ForestFlySearchEnv(BaseFlySearchEnv):
         super().__init__(resolution=resolution, max_altitude=max_altitude, throw_if_hard_config=throw_if_hard_config)
 
     def get_client(self) -> UnrealClientWrapper:
-        forest_binary_path = os.getenv("FOREST_BINARY_PATH")
-
-        if forest_binary_path is None:
-            raise ValueError("FOREST_BINARY_PATH environment variable not set and required for forest scenario type.")
+        forest_binary_path = get_forest_env_binary()
 
         return UnrealClientWrapper(host="localhost", port=9000, unreal_binary_path=forest_binary_path)
 

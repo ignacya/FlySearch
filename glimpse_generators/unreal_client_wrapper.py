@@ -81,34 +81,3 @@ class UnrealClientWrapper:
     def disconnect(self):
         self.client.disconnect()
         self.guardian.process.kill()
-
-
-def main():
-    import os
-
-    from time import sleep
-    from dotenv import load_dotenv
-
-    load_dotenv()
-
-    client = UnrealClientWrapper(
-        host="localhost",
-        port=9000,
-        unreal_binary_path=os.environ["CITY_BINARY_PATH"],
-    )
-
-    print("Hello there!")
-
-    while True:
-        try:
-            client.request("vget /unrealcv/status")
-        except UnrealDiedException:
-            print("Unreal died!")
-
-        print("Is alive:", client.guardian.is_alive)
-        client.guardian.process.kill()
-        print("Is alive:", client.guardian.is_alive)
-
-
-if __name__ == "__main__":
-    main()

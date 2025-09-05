@@ -160,15 +160,3 @@ class UnrealDescriptionGlimpseGenerator(UnrealGridGlimpseGenerator):
         response = conversation.get_latest_message()[1]
 
         return img, response
-
-
-def main():
-    generator = UnrealGridGlimpseGenerator(splits_w=5, splits_h=5)
-    image = generator.get_camera_image((-50, -55, 100))
-    image.show()
-
-    generator.disconnect()
-
-
-if __name__ == "__main__":
-    main()
