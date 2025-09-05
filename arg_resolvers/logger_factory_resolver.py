@@ -8,8 +8,6 @@ from rl.evaluation.loggers import LocalFSLoggerFactory
 
 class LoggerFactoryResolver(BaseArgResolver):
     def register_args(self, parser: ArgumentParser):
-        parser.add_argument("--log_on_wandb", type=str, required=False)
-        parser.add_argument("--wandb_project_name", type=str, required=False)
         parser.add_argument("--log_directory", type=str, required=True)
         parser.add_argument("--run_name", type=str, required=True)
 

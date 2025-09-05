@@ -13,3 +13,4 @@ analysis/report_generation/images/
 analysis/report_generation/*.tex
 all_logs/
 .cache/
+.pytest_cache/

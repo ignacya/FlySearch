@@ -4,8 +4,6 @@
 #--mimic_run_cls_names "*" \
 #--continue_from 0 \
 #--model gpt-4o \
-#--log_on_wandb True \
-#--wandb_project_name "WTLN-RF-1" \
 #--log_directory "all_logs" \
 #--run_name "WTLN-A20-2" \
 #--dummy_first False \
@@ -19,8 +17,6 @@
 #--height_min 100 \
 #--height_max 125 \
 #--model gpt-4o \
-#--log_on_wandb True \
-#--wandb_project_name "WTLN-RF-1" \
 #--log_directory "all_logs" \
 #--run_name "GPT4o-FS2SUN2BOUNDSFIXEDMIMIC" \
 #--dummy_first False \
@@ -39,8 +35,6 @@ python3 drone.py \
 --mimic_run_path run_templates/fs2-template \
 --mimic_run_cls_names "*" \
 --model gpt-4o \
---log_on_wandb True \
---wandb_project_name "WTLN-RF-1" \
 --log_directory "all_logs" \
 --run_name "GPT4o-FS2-Real1f" \
 --dummy_first "true" \

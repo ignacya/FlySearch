@@ -12,7 +12,7 @@ from arg_resolvers import (
     ScenarioArgResolver,
 )
 
-load_dotenv()
+load_dotenv(verbose=True)
 
 
 logging.basicConfig(level=logging.INFO)

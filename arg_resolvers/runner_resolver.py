@@ -18,7 +18,6 @@ class RunnerResolver(BaseArgResolver):
         parser.add_argument("--prompt_type", type=str, required=True, choices=["fs1", "fs2"])
 
     def resolve_args(self, args: Namespace, accumulator: Dict) -> Dict:
-        conversation_factory = accumulator["conversation_factory"]
         environment = accumulator["environment"]
         mapper = accumulator["scenario_mapper"]
 
