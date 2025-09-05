@@ -1,45 +1,106 @@
-import subprocess
-import pathlib
 import os
+import pathlib
+import subprocess
 
-from time import sleep
-from typing import Optional
 from datetime import datetime
+from time import sleep
+from typing import IO, Optional, Sequence, Union
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class UnrealGuardian:
-    def __init__(self, unreal_binary_path: pathlib.Path):
-        self.process: Optional[subprocess.Popen] = None
-        self.unreal_binary_path = unreal_binary_path
-        self.logfile = self._create_logfile()
+    """Lifecycle manager for the standalone Unreal simulation process.
+
+    - Spawns the Unreal binary with sensible defaults for headless rendering.
+    - Streams stdout/stderr to a timestamped logfile under a configurable directory.
+    - Provides reset semantics and liveness checks.
+    """
+
+    def __init__(
+        self,
+        unreal_binary_path: Union[str, pathlib.Path],
+        startup_wait_seconds: int = 120,
+        extra_args: Optional[Sequence[str]] = None,
+        log_dir_env_var: str = "UNREAL_LOG_PATH",
+    ) -> None:
+        self.process: Optional[subprocess.Popen[str]] = None
+        self.unreal_binary_path = pathlib.Path(unreal_binary_path)
+        self.startup_wait_seconds = int(startup_wait_seconds)
+        self.extra_args = list(extra_args) if extra_args is not None else []
+
+        if not self.unreal_binary_path.is_file():
+            raise FileNotFoundError(f"Unreal binary not found: {self.unreal_binary_path}")
+
+        self.logfile: IO[str] = self._create_logfile(log_dir_env_var)
         self._start_unreal()
 
-    def _create_logfile(self):
+    def _create_logfile(self, log_dir_env_var: str) -> IO[str]:
         base_file_name = datetime.now().strftime("%Y-%m-%d-%H:%M:%S-FlySearchUnrealLog")
-        base_path = pathlib.Path(os.environ.get("UNREAL_LOG_PATH"))
-        if not base_path:
-            project_root = pathlib.Path(__file__).parent.parent
-            base_path = project_root
+
+        env_dir = os.environ.get(log_dir_env_var)
+        if env_dir and env_dir.strip():
+            base_path = pathlib.Path(env_dir.strip())
+        else:
+            # Default to project root
+            base_path = pathlib.Path(__file__).parent.parent
+
         base_path.mkdir(exist_ok=True, parents=True)
+        return open(base_path / base_file_name, "w")
 
-        logfile = open(base_path / base_file_name, "w")
+    def _start_unreal(self) -> None:
+        logger.info("Guardian is starting Unreal process.")
+        args = [
+            str(self.unreal_binary_path),
+            "-RenderOffscreen",
+            "-nosound",
+            *self.extra_args,
+        ]
 
-        return logfile
-
-
-    def _start_unreal(self):
         self.process = subprocess.Popen(
-            [str(self.unreal_binary_path), "-RenderOffscreen",  "-nosound"],
+            args,
             stdout=self.logfile,
             stderr=subprocess.STDOUT,
         )
 
-        sleep(120)
+        # Give the process time to initialize and start the UnrealCV server.
+        sleep(self.startup_wait_seconds)
 
-    def reset(self):
-        self.process.kill()
-        print("Unreal Guardian: Terminated Unreal process.")
+    def _terminate_process(self) -> None:
+        if self.process is None:
+            return
+        if self.process.poll() is None:
+            try:
+                self.process.terminate()
+                self.process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+            finally:
+                self.process = None
+        else:
+            self.process = None
+
+    def reset(self) -> None:
+        logger.info("Guardian is resetting Unreal process.")
+        self._terminate_process()
         self._start_unreal()
 
+    def stop(self) -> None:
+        """Gracefully stop the Unreal process."""
+        logger.info("Guardian is stopping Unreal process.")
+        self._terminate_process()
+
+    def close(self) -> None:
+        """Stop the process and close the logfile handle."""
+        self.stop()
+        try:
+            if not self.logfile.closed:
+                self.logfile.close()
+        except Exception as ex:
+            logger.error(f"Error closing logfile: {ex}")
+
     @property
-    def is_alive(self):
-        return self.process.poll() is None
+    def is_alive(self) -> bool:
+        return self.process is not None and self.process.poll() is None

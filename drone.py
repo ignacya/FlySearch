@@ -1,21 +1,35 @@
+import logging
 from argparse import ArgumentParser
+
 from dotenv import load_dotenv
 
-from arg_resolvers import ScenarioArgResolver, ConversationFactoryResolver, LoggerFactoryResolver, RunnerResolver, Bus, \
-    AgentFactoryResolver
+from arg_resolvers import (
+    AgentFactoryResolver,
+    Bus,
+    ConversationFactoryResolver,
+    LoggerFactoryResolver,
+    RunnerResolver,
+    ScenarioArgResolver,
+)
 
 load_dotenv()
+
+
+logging.basicConfig(level=logging.INFO)
+
 
 def main():
     parser = ArgumentParser()
 
-    bus = Bus([
-        ScenarioArgResolver(),
-        ConversationFactoryResolver(),
-        LoggerFactoryResolver(),
-        AgentFactoryResolver(),
-        RunnerResolver(),
-    ])
+    bus = Bus(
+        [
+            ScenarioArgResolver(),
+            ConversationFactoryResolver(),
+            LoggerFactoryResolver(),
+            AgentFactoryResolver(),
+            RunnerResolver(),
+        ]
+    )
 
     bus.register_args(parser)
     args = parser.parse_args()

@@ -10,7 +10,7 @@ from tqdm import tqdm
 def get_city_env_binary():
     return _get_unreal_binary(
         env_variable_name="CITY_BINARY_PATH",
-        linux_exec_path="CitySample/Binaries/Linux/CitySample",
+        linux_exec_path="Linux/CitySample/Binaries/Linux/CitySample",
         linux_download_url="https://zenodo.org/records/15428224/files/City.tar.gz?download=1",
     )
 
@@ -18,7 +18,7 @@ def get_city_env_binary():
 def get_forest_env_binary():
     return _get_unreal_binary(
         env_variable_name="FOREST_BINARY_PATH",
-        linux_exec_path="ElectricDreamsSample/Binaries/Linux/ElectricDreamsSample",
+        linux_exec_path="Linux/ElectricDreamsSample/Binaries/Linux/ElectricDreamsSample",
         linux_download_url="https://zenodo.org/records/15428224/files/Forest.tar.gz?download=1",
     )
 

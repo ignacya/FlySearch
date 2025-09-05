@@ -1,3 +1,4 @@
+from time import sleep
 from glimpse_generators import Client, UnrealGuardian
 
 
@@ -42,9 +43,7 @@ class UnrealClientWrapper:
         self._initialize_client()
 
     def _initialize_client(self):
-        unreal_ok = False
-
-        while not unreal_ok:
+        for _ in range(3):
             try:
                 for i in range(11):
                     print(f"Trying to connect to UnrealCV server on port {self.port + i}")
@@ -53,6 +52,8 @@ class UnrealClientWrapper:
 
                     if connection_result:
                         break
+
+                    sleep(3)
                 else:
                     raise ConnectionError("Failed to connect to UnrealCV server; is it running?")
 
@@ -60,13 +61,11 @@ class UnrealClientWrapper:
                 self.client.request('vget /unrealcv/status')
                 self.client.request('vset /cameras/spawn')
                 self.client.request('vset /camera/1/rotation -90 0 0')
-                unreal_ok = True
+                return
             except UnrealDiedException:
                 self.guardian.reset()
 
     def request(self, *args, **kwargs):
-        # print("Unreal Client Wrapper: request params", args, kwargs)
-
         if not self.guardian.is_alive:
             self.guardian.reset()
             self._initialize_client()
@@ -80,4 +79,4 @@ class UnrealClientWrapper:
 
     def disconnect(self):
         self.client.disconnect()
-        self.guardian.process.kill()
+        self.guardian.close()
