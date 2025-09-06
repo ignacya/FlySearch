@@ -2,11 +2,10 @@ from typing import List, Tuple
 
 from PIL import Image, ImageDraw
 
-from conversation import BaseConversationFactory, GPTFactory
+from conversation.base_conversation_factory import BaseConversationFactory
 from conversation.gemini_factory import GeminiFactory
 from rl.agents.semantic_units import SemanticUnit
-from rl.agents.semantic_units.detection_specialist import PivotLikeDetector, VLMVerifier, GoalIdentifier, \
-    AggregatedPivotLikeDetector
+from rl.agents.semantic_units.detection_specialist import VLMVerifier, AggregatedPivotLikeDetector
 
 
 class SimpleDetectionSpecialist(SemanticUnit):

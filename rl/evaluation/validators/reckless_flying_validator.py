@@ -1,7 +1,7 @@
 import numpy as np
 
-from rl.evaluation import EvaluationState
-from rl.evaluation.validators import BaseValidator
+from rl.evaluation.evaluation_state import EvaluationState
+from rl.evaluation.validators.base_validator import BaseValidator
 
 
 class RecklessFlyingValidator(BaseValidator):

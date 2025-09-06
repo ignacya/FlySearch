@@ -1,4 +1,4 @@
-from rl.evaluation.loggers import BaseLogger
+from rl.evaluation.loggers.base_logger import BaseLogger
 
 
 class BaseLoggerFactory:

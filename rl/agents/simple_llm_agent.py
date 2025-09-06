@@ -2,10 +2,10 @@ from typing import Dict, Optional
 
 import numpy as np
 
-from conversation import Conversation, Role
-from misc import opencv_to_pil
-from response_parsers import parse_xml_response
-from rl.agents import BaseAgent
+from conversation.abstract_conversation import Conversation, Role
+from misc.cv2_and_numpy import opencv_to_pil
+from response_parsers.xml_response_parser import parse_xml_response
+from rl.agents.base_agent import BaseAgent
 
 
 class SimpleLLMAgent(BaseAgent):

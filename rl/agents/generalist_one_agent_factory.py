@@ -1,4 +1,5 @@
-from rl.agents import BaseAgentFactory, GeneralistOne
+from rl.agents.base_agent_factory import BaseAgentFactory
+from rl.agents.generalist_one import GeneralistOne
 
 
 class GeneralistOneAgentFactory(BaseAgentFactory):

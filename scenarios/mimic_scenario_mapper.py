@@ -1,9 +1,13 @@
+import json
 import os
 import pathlib
-import json
-from typing import Dict, Any
+from typing import Any, Dict
 
-from scenarios import CityScenarioMapper, ForestScenarioMapper, BaseScenarioMapper
+from rl.environment.environments import EnvironmentType
+from rl.evaluation.configs.difficulty_levels import DifficultyLevel, DifficultySettings
+from scenarios.base_scenario_mapper import BaseScenarioMapper
+from scenarios.city_scenario_mapper import CityScenarioMapper
+from scenarios.forest_scenario_mapper import ForestScenarioMapper
 
 
 def is_float(value: str) -> bool:
@@ -58,7 +62,9 @@ def is_enum(value: str) -> bool:
 
 
 # I'm sorry
-def to_enum(value: str, scenario: str) -> CityScenarioMapper.ObjectType | ForestScenarioMapper.ObjectType:
+def to_enum(
+        value: str, scenario: str
+) -> CityScenarioMapper.ObjectType | ForestScenarioMapper.ObjectType:
     if not is_enum(value):
         raise ValueError(f"Value {value} is not an enum")
 
@@ -137,13 +143,20 @@ def parse_scenario(scenario):
 
 
 class MimicScenarioMapper(BaseScenarioMapper):
-    def __init__(self, path: pathlib.Path, filter_str: str = "*", continue_from: int = 0):
+    def __init__(
+            self, path: pathlib.Path, filter_str: str = "*", continue_from: int = 0
+    ):
         self.path = path
         self.white_list = filter_str.strip().split(";")
         self.continue_from = continue_from
         self.scenarios = list(self.iterate_scenarios())
 
         object_type_cls = self.scenarios[0]["object_type"]
+
+        # TODO: make better abstraction for this on refactor.
+        self.difficulty = DifficultySettings.FS_2 if self.scenarios[0][
+                                                         "difficulty"] == 'FS2' else DifficultySettings.FS_1
+        self.is_city = type(object_type_cls) is CityScenarioMapper.ObjectType
 
         super().__init__({}, type(object_type_cls))
 
@@ -157,7 +170,9 @@ class MimicScenarioMapper(BaseScenarioMapper):
         entries = os.listdir(self.path)
 
         try:
-            entries = sorted(entries, key=lambda x: (int(x.split("_")[0]), int(x.split("r")[1])))[self.continue_from:]
+            entries = sorted(
+                entries, key=lambda x: (int(x.split("_")[0]), int(x.split("r")[1]))
+            )[self.continue_from:]
         except IndexError:
             entries = sorted(entries, key=lambda x: int(x))[self.continue_from:]
 
@@ -199,15 +214,3 @@ class MimicScenarioMapper(BaseScenarioMapper):
 
                     yield scenario
                     break
-
-
-def main():
-    mimic = MimicScenarioMapper(
-        pathlib.Path("/home/anonymous/MyStuff/active-visual-gpt/all_logs/forest-template"), "*")
-
-    for scenario in mimic.iterate_scenarios():
-        print(scenario["i"])
-
-
-if __name__ == "__main__":
-    main()

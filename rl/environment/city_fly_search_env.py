@@ -1,11 +1,12 @@
 from time import sleep
 from typing import Dict
 
+from glimpse_generators.unreal_client_wrapper import UnrealClientWrapper
 from misc.unreal_utils import get_city_env_binary
-from scenarios.object_classes import BaseObjectClass, PCGClass, ForestSunClass
-
-from glimpse_generators import UnrealClientWrapper
-from rl.environment import BaseFlySearchEnv, DroneCannotSeeTargetException
+from rl.environment.base_fly_search_env import BaseFlySearchEnv, DroneCannotSeeTargetException
+from scenarios.object_classes.base_object_class import BaseObjectClass
+from scenarios.object_classes.forest_sun_class import SunClass
+from scenarios.object_classes.pcg_class import PCGClass
 
 
 class CityFlySearchEnv(BaseFlySearchEnv):
@@ -76,7 +77,7 @@ class CityFlySearchEnv(BaseFlySearchEnv):
         if "sun_y" in options and "sun_z" in options:
             sun_y = options["sun_y"]
             sun_z = options["sun_z"]
-            sun_class: ForestSunClass = self.classes_to_ids["CITY_SUN"]
+            sun_class: SunClass = self.classes_to_ids["CITY_SUN"]
             sun_class.set_sun_rotation(sun_y, sun_z)
 
         if 'FIRE' in str(options["object_type"]):

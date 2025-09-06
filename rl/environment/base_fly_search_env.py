@@ -3,12 +3,12 @@ import gymnasium as gym
 
 from typing import Optional, Dict, List
 
-from glimpse_generators import UnrealClientWrapper, UnrealGlimpseGenerator, UnrealGridGlimpseGenerator
-from glimpse_generators.unreal_client_wrapper import UnrealDiedException
-from misc import pil_to_opencv
-
-from scenarios import get_classes_to_object_classes, classes_to_images
-from scenarios.object_classes import BaseObjectClass
+from glimpse_generators.unreal_client_wrapper import UnrealDiedException, UnrealClientWrapper
+from glimpse_generators.unreal_glimpse_generator import UnrealGridGlimpseGenerator, UnrealGlimpseGenerator
+from misc.cv2_and_numpy import pil_to_opencv
+from scenarios.classes_to_ids import get_classes_to_object_classes
+from scenarios.classes_to_images import classes_to_images
+from scenarios.object_classes.base_object_class import BaseObjectClass
 
 
 class DroneCannotSeeTargetException(Exception):

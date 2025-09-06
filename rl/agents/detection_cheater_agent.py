@@ -3,7 +3,7 @@ from typing import Tuple, Dict
 import numpy as np
 from PIL import Image, ImageDraw
 
-from rl.agents import DescriptionLLMAgent
+from rl.agents.description_llm_agent import DescriptionLLMAgent
 
 
 class DetectionCheaterAgent(DescriptionLLMAgent):

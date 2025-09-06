@@ -1,4 +1,4 @@
-from rl.evaluation.validators import BaseValidatorFactory
+from rl.evaluation.validators.base_validator_factory import BaseValidatorFactory
 from rl.evaluation.validators.reckless_flying_validator import RecklessFlyingValidator
 
 

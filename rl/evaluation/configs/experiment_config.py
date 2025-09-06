@@ -1,10 +1,10 @@
 from typing import List, Callable
 
-from rl.agents import BaseAgentFactory
-from rl.environment import BaseFlySearchEnv
-from rl.evaluation.loggers import BaseLoggerFactory
-from rl.evaluation.validators import BaseValidatorFactory
-from scenarios import BaseScenarioMapper
+from rl.agents.base_agent_factory import BaseAgentFactory
+from rl.environment.base_fly_search_env import BaseFlySearchEnv
+from rl.evaluation.loggers.base_logger_factory import BaseLoggerFactory
+from rl.evaluation.validators.base_validator_factory import BaseValidatorFactory
+from scenarios.base_scenario_mapper import BaseScenarioMapper
 
 
 class ExperimentConfig:

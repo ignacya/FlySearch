@@ -2,15 +2,13 @@ from typing import Dict
 
 import numpy as np
 
-from conversation import BaseConversationFactory
-from misc import opencv_to_pil
-from rl.agents import SimpleLLMAgent
-from rl.agents.semantic_units.action_space_specialist import ActionSpaceSpecialistFailure, ActionSpaceSpecialist
+from conversation.base_conversation_factory import BaseConversationFactory
+from misc.cv2_and_numpy import opencv_to_pil
+from rl.agents.semantic_units.action_space_specialist import ActionSpaceSpecialist
 from rl.agents.semantic_units.decision_making_specialist import DecisionMakingSpecialist
-from rl.agents.semantic_units.detection_specialist import GoalIdentifier, SimpleDetectionSpecialist, \
-    SplittingDetectionSpecialist
 from rl.agents.semantic_units.execution_specialist import ExecutionSpecialist
 from rl.agents.semantic_units.summary_specialist import SummarySpecialist
+from rl.agents.simple_llm_agent import SimpleLLMAgent
 
 
 class GeneralistOne(SimpleLLMAgent):

@@ -1,10 +1,9 @@
 import re
-
 from random import Random
-
 from typing import List
 
-from glimpse_generators import UnrealException, Client
+from glimpse_generators.unreal_client_wrapper import UnrealException
+from glimpse_generators.unrealcv_fix import Client
 
 
 class BaseObjectClass:
@@ -14,9 +13,11 @@ class BaseObjectClass:
         self.visible = False  # By default, objects are hidden. This also means that we don't need to care about binary restarts if something goes wrong.
 
     def _hide_object(self, object_id: str):
-        id_number = int(re.findall(r'\d+', object_id)[-1])
+        id_number = int(re.findall(r"\d+", object_id)[-1])
 
-        print(f"BaseObjectClass _hide_object, object id_number of {object_id} is {id_number}")
+        print(
+            f"BaseObjectClass _hide_object, object id_number of {object_id} is {id_number}"
+        )
 
         x = id_number // 1000
         y = id_number // 1000
@@ -25,9 +26,11 @@ class BaseObjectClass:
         self.client.request(f"vset /object/{object_id}/location {x} {y} {z}")
 
         # Fires need also hiding, as it extinguishes them. Fire may burn even after being moved, which is why we need this.
-        if 'Niagara' in object_id or object_id in ["BP_Configuration_13_C_UAID_08BFB8191750E53702_1640163914",
-                                                   "BP_Configuration_12_C_UAID_08BFB8191750E53702_1361488908",
-                                                   "SkeletalMeshActor_UAID_08BFB8191750E43702_1589650724"]:
+        if "Niagara" in object_id or object_id in [
+            "BP_Configuration_13_C_UAID_08BFB8191750E53702_1640163914",
+            "BP_Configuration_12_C_UAID_08BFB8191750E53702_1361488908",
+            "SkeletalMeshActor_UAID_08BFB8191750E43702_1589650724",
+        ]:
             self.client.request(f"vset /object/{object_id}/hide")
 
     def hide_all_objects(self):

@@ -1,11 +1,11 @@
 from typing import Dict
 
 from rl.agents import BaseAgent, BaseAgentFactory
-from rl.evaluation import EvaluationState, TrajectoryEvaluator
-from rl.evaluation.validators import BaseValidator
+from rl.environment import DroneCannotSeeTargetException
+from rl.evaluation.evaluation_state import EvaluationState
 from rl.evaluation.loggers import BaseLogger
-from rl.environment import BaseFlySearchEnv, DroneCannotSeeTargetException
-from scenarios import BaseScenarioMapper, CityScenarioMapper, ForestScenarioMapper
+from rl.evaluation.trajectory_evaluator import TrajectoryEvaluator
+from rl.evaluation.validators.base_validator import BaseValidator
 
 
 class ScenarioMapperMock:
@@ -144,15 +144,21 @@ class TestTrajectoryEvaluator:
         mapper.set_dict_with_returns({"abc": 43})
 
         env_mock.set_throws_on_reset(0)
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 10, mapper, [], [], 155, 10, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory, env_mock, 10, mapper, [], [], 155, 10, prompt_func
+        )
 
         assert len(env_mock.configs_passed) == 1
 
         def get_subset(d):
             return {k: d[k] for k in ("seed", "abc", "object_type", "throws")}
 
-        assert get_subset(env_mock.configs_passed[0]) == {"seed": 155, "abc": 43, "object_type": "car",
-                                                          "throws": 0}  # Should add "throws" key
+        assert get_subset(env_mock.configs_passed[0]) == {
+            "seed": 155,
+            "abc": 43,
+            "object_type": "car",
+            "throws": 0,
+        }  # Should add "throws" key
 
         assert agent_factory.prompt == "Prompt: 10, a car, 400"
 
@@ -164,16 +170,34 @@ class TestTrajectoryEvaluator:
         mapper.set_dict_with_returns({"abc": 43})
 
         env_mock.set_throws_on_reset(3)
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 6, mapper, [], [], 155, 10, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory, env_mock, 6, mapper, [], [], 155, 10, prompt_func
+        )
 
         def get_subset(d):
             return {k: d[k] for k in ("seed", "abc", "object_type")}
 
         assert len(env_mock.configs_passed) == 4
-        assert get_subset(env_mock.configs_passed[0]) == {"seed": 155, "abc": 43, "object_type": "car"}
-        assert get_subset(env_mock.configs_passed[1]) == {"seed": 155, "abc": 43, "object_type": "car"}
-        assert get_subset(env_mock.configs_passed[2]) == {"seed": 155, "abc": 43, "object_type": "car"}
-        assert get_subset(env_mock.configs_passed[3]) == {"seed": 155, "abc": 43, "object_type": "car"}
+        assert get_subset(env_mock.configs_passed[0]) == {
+            "seed": 155,
+            "abc": 43,
+            "object_type": "car",
+        }
+        assert get_subset(env_mock.configs_passed[1]) == {
+            "seed": 155,
+            "abc": 43,
+            "object_type": "car",
+        }
+        assert get_subset(env_mock.configs_passed[2]) == {
+            "seed": 155,
+            "abc": 43,
+            "object_type": "car",
+        }
+        assert get_subset(env_mock.configs_passed[3]) == {
+            "seed": 155,
+            "abc": 43,
+            "object_type": "car",
+        }
 
         assert agent_factory.prompt == "Prompt: 6, a car, 400"
 
@@ -185,11 +209,17 @@ class TestTrajectoryEvaluator:
         mapper.set_dict_with_returns({"abc": 43})
 
         env_mock.set_obs_returned({"image": "image", "altitude": 10, "collision": 0})
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 1, mapper, [], [], 155, 10, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory, env_mock, 1, mapper, [], [], 155, 10, prompt_func
+        )
         evaluator.evaluate()
 
         assert len(agent_mock.observations) == 1
-        assert agent_mock.observations[0] == {"image": "image", "altitude": 10, "collision": 0}
+        assert agent_mock.observations[0] == {
+            "image": "image",
+            "altitude": 10,
+            "collision": 0,
+        }
 
     def test_trajectory_evaluator_passes_many_actions_to_agent(self):
         env_mock = EnvironmentMock()
@@ -201,12 +231,22 @@ class TestTrajectoryEvaluator:
         env_mock.set_obs_returned({"image": "image", "altitude": 10, "collision": 0})
 
         agent_mock.set_action_to_return({"found": 0, "coordinate_change": (1, 2, 3)})
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 15, mapper, [], [], 155, 10, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory, env_mock, 15, mapper, [], [], 155, 10, prompt_func
+        )
         evaluator.evaluate()
 
         assert len(agent_mock.observations) == 15
-        assert agent_mock.observations[0] == {"image": "image", "altitude": 10, "collision": 0}
-        assert agent_mock.observations[1] == {"image": "image", "altitude": 10, "collision": 0}
+        assert agent_mock.observations[0] == {
+            "image": "image",
+            "altitude": 10,
+            "collision": 0,
+        }
+        assert agent_mock.observations[1] == {
+            "image": "image",
+            "altitude": 10,
+            "collision": 0,
+        }
         assert len(env_mock.actions_passed) == 15
 
     def test_tells_agent_to_redo_if_validator_has_objections(self):
@@ -234,9 +274,17 @@ class TestTrajectoryEvaluator:
         env_mock.set_obs_returned({"image": "image", "altitude": 10, "collision": 0})
 
         agent_mock.set_action_to_return({"found": 0, "coordinate_change": (1, 2, 3)})
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 3, mapper, [logger],
-                                        [validator_1, validator_2, validator_3],
-                                        155, 10, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory,
+            env_mock,
+            3,
+            mapper,
+            [logger],
+            [validator_1, validator_2, validator_3],
+            155,
+            10,
+            prompt_func,
+        )
 
         evaluator.evaluate()
 
@@ -247,7 +295,9 @@ class TestTrajectoryEvaluator:
 
         assert len(env_mock.actions_passed) == 3
 
-        assert len(logger.evaluation_states) == 6  # There were always 2 action attempts per evaluation
+        assert (
+            len(logger.evaluation_states) == 6
+        )  # There were always 2 action attempts per evaluation
         assert len(logger.termination_info) == 1
         assert logger.termination_info[0] == {"reason": "glimpses ran out"}
 
@@ -276,9 +326,17 @@ class TestTrajectoryEvaluator:
         env_mock.set_obs_returned({"image": "image", "altitude": 10, "collision": 0})
 
         agent_mock.set_action_to_return({"found": 0, "coordinate_change": (1, 2, 3)})
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 3, mapper, [logger],
-                                        [validator_1, validator_2, validator_3],
-                                        155, 3, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory,
+            env_mock,
+            3,
+            mapper,
+            [logger],
+            [validator_1, validator_2, validator_3],
+            155,
+            3,
+            prompt_func,
+        )
 
         evaluator.evaluate()
 
@@ -291,7 +349,9 @@ class TestTrajectoryEvaluator:
 
         assert len(logger.evaluation_states) == 3  # 3 times informed
         assert len(logger.termination_info) == 1
-        assert logger.termination_info[0] == {"reason": "validation forgiveness ran out"}
+        assert logger.termination_info[0] == {
+            "reason": "validation forgiveness ran out"
+        }
 
     def test_terminates_if_environment_told_it_so(self):
         env_mock = EnvironmentMock()
@@ -303,7 +363,9 @@ class TestTrajectoryEvaluator:
         env_mock.set_return_terminated(True)
         agent_mock.set_action_to_return({"found": 0, "coordinate_change": (1, 2, 3)})
 
-        evaluator = TrajectoryEvaluator(agent_factory, env_mock, 3, mapper, [logger], [], 155, 3, prompt_func)
+        evaluator = TrajectoryEvaluator(
+            agent_factory, env_mock, 3, mapper, [logger], [], 155, 3, prompt_func
+        )
 
         evaluator.evaluate()
 

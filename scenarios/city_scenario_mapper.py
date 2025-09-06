@@ -5,7 +5,7 @@ from typing import Tuple, Any, Dict
 
 import pandas as pd
 
-from scenarios import BaseScenarioMapper
+from scenarios.base_scenario_mapper import BaseScenarioMapper
 
 
 class CityScenarioMapper(BaseScenarioMapper):
@@ -27,10 +27,18 @@ class CityScenarioMapper(BaseScenarioMapper):
         BLACK_TRUCK = 14
         WHITE_TRUCK = 15
 
-    def __init__(self, object_probs: dict[ObjectType | Tuple, float], drone_z_rel_min: float, drone_z_rel_max: float,
-                 x_min: float = -math.inf, x_max: float = math.inf,
-                 y_min: float = -math.inf,
-                 y_max: float = math.inf, alpha: float = 0.5, random_sun: bool = False):
+    def __init__(
+            self,
+            object_probs: dict[ObjectType | Tuple, float],
+            drone_z_rel_min: float,
+            drone_z_rel_max: float,
+            x_min: float = -math.inf,
+            x_max: float = math.inf,
+            y_min: float = -math.inf,
+            y_max: float = math.inf,
+            alpha: float = 0.5,
+            random_sun: bool = False,
+    ):
         super().__init__(object_probs, CityScenarioMapper.ObjectType)
 
         self.drone_z_rel_min = drone_z_rel_min
@@ -41,20 +49,31 @@ class CityScenarioMapper(BaseScenarioMapper):
         possible_location_csv_path = os.getenv("LOCATIONS_CITY_PATH")
 
         if possible_location_csv_path is None or possible_location_csv_path == "":
-            possible_location_csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'locations_city.csv')
+            possible_location_csv_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "locations_city.csv"
+            )
 
         if not os.path.isfile(possible_location_csv_path):
             raise ValueError(
-                "LOCATIONS_CITY_PATH environment variable must be set to the path of the locations_city.csv file")
+                "LOCATIONS_CITY_PATH environment variable must be set to the path of the locations_city.csv file"
+            )
 
         self.possible_locations = pd.read_csv(possible_location_csv_path)
 
         # Drop locations that are not in the specified range
-        self.possible_locations = self.possible_locations[self.possible_locations["X"] >= x_min]
-        self.possible_locations = self.possible_locations[self.possible_locations["X"] <= x_max]
+        self.possible_locations = self.possible_locations[
+            self.possible_locations["X"] >= x_min
+            ]
+        self.possible_locations = self.possible_locations[
+            self.possible_locations["X"] <= x_max
+            ]
 
-        self.possible_locations = self.possible_locations[self.possible_locations["Y"] >= y_min]
-        self.possible_locations = self.possible_locations[self.possible_locations["Y"] <= y_max]
+        self.possible_locations = self.possible_locations[
+            self.possible_locations["Y"] >= y_min
+            ]
+        self.possible_locations = self.possible_locations[
+            self.possible_locations["Y"] <= y_max
+            ]
 
         self._validate_object_probs()
 
@@ -71,9 +90,13 @@ class CityScenarioMapper(BaseScenarioMapper):
         object_rot_q = row["Q"]
         object_rot_r = row["R"]
 
-        drone_z = self.sample_value_between(object_z + self.drone_z_rel_min, object_z + self.drone_z_rel_max)
+        drone_z = self.sample_value_between(
+            object_z + self.drone_z_rel_min, object_z + self.drone_z_rel_max
+        )
 
-        drone_x, drone_y = CityScenarioMapper.sample_drone_position(object_x, object_y, drone_z, alpha=self.alpha)
+        drone_x, drone_y = CityScenarioMapper.sample_drone_position(
+            object_x, object_y, drone_z, alpha=self.alpha
+        )
 
         drone_x = drone_x - object_x
         drone_y = drone_y - object_y
@@ -111,7 +134,10 @@ class CityScenarioMapper(BaseScenarioMapper):
 def main():
     csm = CityScenarioMapper(
         object_probs={
-            (CityScenarioMapper.ObjectType.POLICE_CAR, CityScenarioMapper.ObjectType.BEIGE_SPORT_CAR): 1.0,
+            (
+                CityScenarioMapper.ObjectType.POLICE_CAR,
+                CityScenarioMapper.ObjectType.BEIGE_SPORT_CAR,
+            ): 1.0,
         },
         drone_z_rel_min=0,
         drone_z_rel_max=10000,

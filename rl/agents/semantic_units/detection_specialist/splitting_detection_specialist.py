@@ -2,7 +2,7 @@ from typing import Tuple, List
 
 from PIL import Image, ImageDraw
 
-from conversation import BaseConversationFactory, GPTFactory
+from conversation.base_conversation_factory import BaseConversationFactory
 from conversation.gemini_factory import GeminiFactory
 from rl.agents.semantic_units.detection_specialist import SimpleDetectionSpecialist
 

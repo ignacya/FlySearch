@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from conversation import Conversation
+from conversation.abstract_conversation import Conversation
 from rl.agents.simple_llm_agent import SimpleLLMAgent
 
 

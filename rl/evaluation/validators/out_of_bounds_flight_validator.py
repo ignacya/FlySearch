@@ -1,6 +1,6 @@
 import numpy as np
 
-from rl.evaluation import EvaluationState
+from rl.evaluation.evaluation_state import EvaluationState
 
 
 class OutOfBoundsFlightValidator:
@@ -16,7 +16,9 @@ class OutOfBoundsFlightValidator:
         current_position = evaluation_state.info["real_position"]
         diff = list(evaluation_state.action["coordinate_change"])
 
-        total_diff = np.array(current_position) - np.array(self.first_position) + np.array(diff)
+        total_diff = (
+            np.array(current_position) - np.array(self.first_position) + np.array(diff)
+        )
 
         if np.max(np.abs(total_diff[:2])) > self.search_diameter:
             return False, {"reason": "out_of_bounds", "xy_bound": self.search_diameter}
@@ -26,7 +28,6 @@ class OutOfBoundsFlightValidator:
     def inform_about_starting_altitude(self, starting_altitude: float):
         if self.fs2_behavior:
             self.search_diameter = starting_altitude
-
 
     def nuke(self):
         self.first_position = None

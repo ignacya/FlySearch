@@ -4,7 +4,37 @@ import tarfile
 import urllib.request
 from pathlib import Path
 
-from tqdm import tqdm
+import typer
+from rich.progress import (
+    BarColumn,
+    DownloadColumn,
+    Progress,
+    TextColumn,
+    TimeRemainingColumn,
+    TransferSpeedColumn,
+)
+
+
+def download_with_progress(url, filepath):
+    with Progress(
+        TextColumn("[bold blue]{task.description}", justify="right"),
+        BarColumn(bar_width=None),
+        "[progress.percentage]{task.percentage:>3.1f}%",
+        "•",
+        DownloadColumn(),
+        "•",
+        TransferSpeedColumn(),
+        "•",
+        TimeRemainingColumn(),
+    ) as progress:
+        task = progress.add_task("Downloading", total=None)
+
+        def reporthook(block_num, block_size, total_size):
+            if total_size > 0:
+                progress.update(task, total=total_size)
+            progress.update(task, advance=block_size)
+
+        urllib.request.urlretrieve(url, filepath, reporthook=reporthook)
 
 
 def get_city_env_binary():
@@ -62,16 +92,16 @@ def _get_unreal_binary(
     # Binary not found, ask user if they want to download
 
     print(f"Unreal Engine binary not found at {binary_path}")
-    print("The binary is approximately 20GB in size, unpacking it will require twice that amount of space")
-    print(f"We will download it to: {store_path}, if you want to change this, set the SIMULATOR_PATH environment variable.")
-
-    response = (
-        input("Would you like to download the Unreal Engine binary? (y/N): ")
-        .strip()
-        .lower()
+    print(
+        "The binary is approximately 20GB in size, unpacking it will require twice that amount of space"
+    )
+    print(
+        f"We will download it to: {store_path}, if you want to change this, set the SIMULATOR_PATH environment variable."
     )
 
-    if response not in ["y", "yes"]:
+    response = typer.confirm("Would you like to download the Unreal Engine binary?")
+
+    if not response:
         raise FileNotFoundError(
             f"Unreal Engine binary not found and download declined. "
             f"Please set {env_variable_name} environment variable or place binary at {binary_path}"
@@ -84,17 +114,8 @@ def _get_unreal_binary(
     print(f"Downloading Unreal Engine binary from {linux_download_url}...")
     tar_path = os.path.join(store_path, "temp_download.tar.gz")
 
-    class TqdmUpTo(tqdm):
-        def update_to(self, b=1, bsize=1, tsize=None):
-            if tsize is not None:
-                self.total = tsize
-            return self.update(b * bsize - self.n)
-
     try:
-        with TqdmUpTo(unit="B", unit_scale=True, miniters=1, desc="Downloading") as t:
-            urllib.request.urlretrieve(
-                linux_download_url, tar_path, reporthook=t.update_to
-            )
+        download_with_progress(linux_download_url, tar_path)
 
         print("Download complete. Extracting...")
 

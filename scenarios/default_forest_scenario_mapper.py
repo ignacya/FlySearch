@@ -1,4 +1,4 @@
-from scenarios import ForestScenarioMapper
+from scenarios.forest_scenario_mapper import ForestScenarioMapper
 
 
 class DefaultForestScenarioMapper(ForestScenarioMapper):
@@ -13,11 +13,13 @@ class DefaultForestScenarioMapper(ForestScenarioMapper):
             drone_z_rel_min=drone_alt_min * 100,
             drone_z_rel_max=drone_alt_max * 100,
             object_probs={
-                (ForestScenarioMapper.ObjectType.PERSON,
-                 ForestScenarioMapper.ObjectType.FOREST_FIRE,
-                 ForestScenarioMapper.ObjectType.TRASH_PILE,
-                 ForestScenarioMapper.ObjectType.CAMPSITE,
-                 ForestScenarioMapper.ObjectType.BUILDING): 1.0
+                (
+                    ForestScenarioMapper.ObjectType.PERSON,
+                    ForestScenarioMapper.ObjectType.FOREST_FIRE,
+                    ForestScenarioMapper.ObjectType.TRASH_PILE,
+                    ForestScenarioMapper.ObjectType.CAMPSITE,
+                    ForestScenarioMapper.ObjectType.BUILDING,
+                ): 1.0
             },
             alpha=alpha,
         )

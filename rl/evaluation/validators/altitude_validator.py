@@ -1,5 +1,5 @@
-from rl.evaluation import EvaluationState
-from rl.evaluation.validators import BaseValidator
+from rl.evaluation.evaluation_state import EvaluationState
+from rl.evaluation.validators.base_validator import BaseValidator
 
 
 class AltitudeValidator(BaseValidator):
@@ -11,8 +11,12 @@ class AltitudeValidator(BaseValidator):
         altitude_diff = evaluation_state.action["coordinate_change"][2]
 
         if altitude_before + altitude_diff > self.max_altitude:
-            return False, {"reason": "too_high", "alt_before": altitude_before,
-                           "alt_after": altitude_before + altitude_diff, "alt_max": self.max_altitude}
+            return False, {
+                "reason": "too_high",
+                "alt_before": altitude_before,
+                "alt_after": altitude_before + altitude_diff,
+                "alt_max": self.max_altitude,
+            }
 
         return True, {}
 

@@ -1,4 +1,4 @@
-from rl.agents import BaseAgentFactory
+from rl.agents.base_agent_factory import BaseAgentFactory
 from rl.agents.parsing_error_agent import ParsingErrorAgent
 
 

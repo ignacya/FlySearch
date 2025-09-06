@@ -1,4 +1,4 @@
-from rl.evaluation.validators import BaseValidator
+from rl.evaluation.validators.base_validator import BaseValidator
 
 
 class BaseValidatorFactory:

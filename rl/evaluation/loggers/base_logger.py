@@ -1,6 +1,6 @@
 from typing import Dict
 
-from rl.evaluation import EvaluationState
+from rl.evaluation.evaluation_state import EvaluationState
 
 
 class BaseLogger:

@@ -4,7 +4,8 @@ from time import sleep
 
 from PIL import Image
 
-from conversation import OpenAIConversation, Role
+from conversation.abstract_conversation import Role
+from conversation.openai_conversation import OpenAIConversation
 
 
 class AnthropicConversation(OpenAIConversation):

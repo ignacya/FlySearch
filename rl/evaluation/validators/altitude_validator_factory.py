@@ -1,4 +1,6 @@
-from rl.evaluation.validators import BaseValidatorFactory, BaseValidator, AltitudeValidator
+from rl.evaluation.validators.altitude_validator import AltitudeValidator
+from rl.evaluation.validators.base_validator import BaseValidator
+from rl.evaluation.validators.base_validator_factory import BaseValidatorFactory
 
 
 class AltitudeValidatorFactory(BaseValidatorFactory):

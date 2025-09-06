@@ -1,4 +1,4 @@
-from rl.agents import BaseAgent
+from rl.agents.base_agent import BaseAgent
 
 
 class BaseAgentFactory:

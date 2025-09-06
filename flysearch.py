@@ -1,15 +1,33 @@
-from datetime import datetime
 import logging
-from enum import Enum
 import pathlib
+from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 import typer
 from dotenv import load_dotenv
 
 from conversation.conversations import LLM_BACKEND_FACTORIES, LLMBackends
+from prompts.prompts import PROMPT_FACTORIES
 from rl.agents.agents import AGENT_FACTORIES, Agents
+from rl.environment import EnvironmentType
+from rl.environment.environments import ENVIRONMENTS
+from rl.evaluation.configs.difficulty_levels import (
+    DIFFICULTY_LEVELS,
+    DifficultySettings,
+)
+from rl.evaluation.configs.experiment_config import ExperimentConfig
+from rl.evaluation.experiment_runner import ExperimentRunner
 from rl.evaluation.loggers.local_fs_logger_factory import LocalFSLoggerFactory
+from rl.evaluation.validators.altitude_validator_factory import AltitudeValidatorFactory
+from rl.evaluation.validators.out_of_bounds_flight_validator_factory import (
+    OutOfBoundsFlightValidatorFactory,
+)
+from rl.evaluation.validators.reckless_flying_validator_factory import (
+    RecklessFlyingValidatorFactory,
+)
+from scenarios.mimic_scenario_mapper import MimicScenarioMapper
+from scenarios.scenarios import SCENARIO_CLASSES, Scenarios
 
 app = typer.Typer(
     help="FlySearch benchmark", add_completion=False, no_args_is_help=True
@@ -26,10 +44,7 @@ class LogLevel(str, Enum):
     DEBUG = "DEBUG"
 
 
-context = {
-    "conversation_factory": None,
-    "logger_factories": None,
-}
+context = {}
 
 
 @app.callback()
@@ -41,16 +56,21 @@ def main(
     run_name: Optional[str] = typer.Option(
         help="The name of the benchmark run (default to date and time)", default=None
     ),
-    results_directory: str = typer.Option(
+    results_directory: pathlib.Path = typer.Option(
         help="The directory to store the experiment results", default="all_logs"
     ),
     agent: Agents = typer.Option(
         help="The type of agent to use (use default for oryginal FlySearch)",
         default=Agents.SIMPLE_LLM,
     ),
-    skip_sanity_check: bool = typer.Option(False,
+    skip_sanity_check: bool = typer.Option(
+        False,
         "--skip-sanity-check",
         help="Whether to skip running a sanity check before the benchmark (not recommended)",
+    ),
+    number_of_runs: int = typer.Option(
+        help="The number of runs to perform",
+        default=300,
     ),
     continue_from_idx: int = typer.Option(
         help="The index of the scenario to continue running from (e.g. if execution was interrupted)",
@@ -76,57 +96,107 @@ def main(
     context["agent_factory"] = AGENT_FACTORIES[agent](context["conversation_factory"])
     context["continue_from_idx"] = continue_from_idx
     context["sanity_check"] = not skip_sanity_check
+    context["number_of_runs"] = number_of_runs
 
 
 @app.command()
 def benchmark(
-    scenario_directory: str = typer.Argument(
+    scenario_directory: pathlib.Path = typer.Argument(
         help="The directory containing the scenarios to run the benchmark on"
     ),
 ):
     """
     Run a predefined benchmark set.
     """
-    pass
+    scenario_mapper = MimicScenarioMapper(
+        scenario_directory, continue_from=context["continue_from_idx"]
+    )
+    env_type = (
+        EnvironmentType.CITY if scenario_mapper.is_city else EnvironmentType.FOREST
+    )
+    difficulty_level = DIFFICULTY_LEVELS[scenario_mapper.difficulty]
+    environment = ENVIRONMENTS[env_type](
+        give_class_image=difficulty_level.show_visual_sample
+    )
+
+    validator_factories = [
+        AltitudeValidatorFactory(difficulty_level.max_uav_altitude),
+        OutOfBoundsFlightValidatorFactory(
+            fs2_behavior=difficulty_level == DifficultySettings.FS_2
+        ),
+    ]
+    if difficulty_level == DifficultySettings.FS_1:
+        validator_factories.append(RecklessFlyingValidatorFactory())
+
+    config = ExperimentConfig(
+        agent_factory=context["agent_factory"],
+        scenario_mapper=scenario_mapper,
+        environment=environment,
+        logger_factories=context["logger_factories"],
+        validator_factories=validator_factories,
+        forgiveness=difficulty_level.max_retries,
+        number_of_runs=context["number_of_runs"],
+        number_of_glimpses=difficulty_level.max_steps,
+        prompt_factory=PROMPT_FACTORIES[difficulty_level.prompt_type],
+    )
+
+    runner = ExperimentRunner(config, first_dummy=context["sanity_check"])
+    runner.run()
 
 
 @app.command()
 def random_scenarios(
-    scenario_type: str = typer.Argument(help="The type of scenario to generate"),
-    difficulty: str = typer.Argument(help="The difficulty of the scenario"),
+    scenario_type: Scenarios = typer.Argument(help="The type of scenario to generate"),
+    difficulty: DifficultySettings = typer.Argument(
+        help="The difficulty of the scenario"
+    ),
 ):
     """
     Run FlySearch with random scenario generation.
     """
-    pass
+    difficulty_level = DIFFICULTY_LEVELS[difficulty]
+    kwargs = {}
+    # TODO: make better abstraction for this on refactor.
+    if difficulty == DifficultySettings.FS_2:
+        kwargs["random_sun"] = True
+    scenario_mapper = SCENARIO_CLASSES[scenario_type](
+        drone_alt_min=difficulty_level.starting_uav_altitude_range[0],
+        drone_alt_max=difficulty_level.starting_uav_altitude_range[1],
+        alpha=difficulty_level.starting_uav_position_offset,
+        **kwargs,
+    )
+    environment = ENVIRONMENTS[
+        EnvironmentType.CITY
+        if scenario_type in [Scenarios.CITY, Scenarios.CITY_ANOMALY]
+        else EnvironmentType.FOREST
+    ](
+        give_class_image=difficulty_level.show_visual_sample,
+        throw_if_hard_config=difficulty_level.target_line_of_sight_assured,
+    )
 
+    validator_factories = [
+        AltitudeValidatorFactory(difficulty_level.max_uav_altitude),
+        OutOfBoundsFlightValidatorFactory(
+            fs2_behavior=difficulty_level == DifficultySettings.FS_2
+        ),
+    ]
+    if difficulty_level == DifficultySettings.FS_1:
+        validator_factories.append(RecklessFlyingValidatorFactory())
 
-@app.command()
-def custom_scenarios(
-    scenario_type: str = typer.Option(help="The type of scenario to generate"),
-    height_min: int = typer.Option(help="The minimum height of the scenario"),
-    height_max: int = typer.Option(help="The maximum height of the scenario"),
-    alpha: float = typer.Option(help="The alpha value for the scenario"),
-    random_sun: bool = typer.Option(
-        help="Whether to generate scenarios with random sun positions"
-    ),
-    number_of_runs: int = typer.Option(help="The number of scenarios to generate"),
-    glimpses: int = typer.Option(
-        help="The number of glimpses (or images) the agent is allowed to see in the trajectory, 10 for FS-1 and 20 for FS-2"
-    ),
-    prompt_type: str = typer.Option(help="The type of prompt to use (fs1 or fs2)"),
-    show_class_image: bool = typer.Option(
-        help="Whether to show the class image in the scenario (true for FS-2, false for FS-1 and FS-Anomaly-1)"
-    ),
-    forgiveness: int = typer.Option(
-        help="The number of model retries in case of action parsing error before terminating the trajectory",
-        default=5,
-    ),
-):
-    """
-    Run FlySearch with custom random scenario generation.
-    """
-    pass
+    config = ExperimentConfig(
+        agent_factory=context["agent_factory"],
+        scenario_mapper=scenario_mapper,
+        environment=environment,
+        logger_factories=context["logger_factories"],
+        validator_factories=validator_factories,
+        forgiveness=difficulty_level.max_retries,
+        number_of_runs=context["number_of_runs"],
+        number_of_glimpses=difficulty_level.max_steps,
+        prompt_factory=PROMPT_FACTORIES[difficulty_level.prompt_type],
+    )
+
+    runner = ExperimentRunner(config, first_dummy=context["sanity_check"])
+    runner.run()
 
 
 if __name__ == "__main__":

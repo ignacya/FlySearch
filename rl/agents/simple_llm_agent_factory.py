@@ -1,5 +1,6 @@
-from conversation import BaseConversationFactory
-from rl.agents import SimpleLLMAgent, BaseAgentFactory
+from conversation.base_conversation_factory import BaseConversationFactory
+from rl.agents.base_agent_factory import BaseAgentFactory
+from rl.agents.simple_llm_agent import SimpleLLMAgent
 
 
 class SimpleLLMAgentFactory(BaseAgentFactory):

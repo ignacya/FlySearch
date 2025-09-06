@@ -3,9 +3,10 @@ from typing import Dict, Tuple
 import numpy as np
 from PIL import Image
 
-from conversation import Conversation, Role, BaseConversationFactory
-from misc import opencv_to_pil
-from rl.agents import SimpleLLMAgent
+from conversation.abstract_conversation import Conversation, Role
+from conversation.base_conversation_factory import BaseConversationFactory
+from misc.cv2_and_numpy import opencv_to_pil
+from rl.agents.simple_llm_agent import SimpleLLMAgent
 
 
 class DescriptionLLMAgent(SimpleLLMAgent):

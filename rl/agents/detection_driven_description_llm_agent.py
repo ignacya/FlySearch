@@ -1,11 +1,9 @@
-import numpy as np
-
-from PIL import Image
 from typing import Tuple, Dict
 
-from conversation import BaseConversationFactory, Role
-from rl.agents import DescriptionLLMAgent
-from rl.agents.semantic_units.decision_making_specialist import DecisionMakingSpecialist
+from PIL import Image
+
+from conversation.abstract_conversation import Role
+from rl.agents.description_llm_agent import DescriptionLLMAgent
 from rl.agents.semantic_units.detection_specialist import SplittingDetectionSpecialist
 
 

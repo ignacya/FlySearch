@@ -1,5 +1,7 @@
 from time import sleep
-from glimpse_generators import Client, UnrealGuardian
+
+from glimpse_generators.unreal_guardian import UnrealGuardian
+from glimpse_generators.unrealcv_fix import Client
 
 
 class UnrealDiedException(Exception):

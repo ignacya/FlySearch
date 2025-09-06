@@ -1,6 +1,5 @@
 def fs1_prompt(glimpses: int, object_name: str, search_area_rectangle_length: int) -> str:
-    return f'''
-<Context>
+    return f'''<Context>
     You are in command of a UAV, tasked with finding {object_name}.
 </Context>
 
@@ -45,9 +44,8 @@ def fs1_prompt(glimpses: int, object_name: str, search_area_rectangle_length: in
 '''
 
 
-def fs2_prompt(glimpses: int, object_name: str, search_area_rectangle_length: int) -> str:
-    return f'''
-<Context>
+def fs2_prompt(glimpses: int, object_name: str, **_) -> str:
+    return f'''<Context>
     You are in command of a UAV, tasked with finding {object_name}.
 </Context>
 

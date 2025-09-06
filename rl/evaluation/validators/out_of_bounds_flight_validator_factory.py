@@ -1,4 +1,5 @@
-from rl.evaluation.validators import BaseValidatorFactory, OutOfBoundsFlightValidator
+from rl.evaluation.validators.base_validator_factory import BaseValidatorFactory
+from rl.evaluation.validators.out_of_bounds_flight_validator import OutOfBoundsFlightValidator
 
 
 class OutOfBoundsFlightValidatorFactory(BaseValidatorFactory):

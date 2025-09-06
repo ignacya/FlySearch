@@ -1,6 +1,6 @@
 from typing import Dict, Tuple
 
-from rl.evaluation import EvaluationState
+from rl.evaluation.evaluation_state import EvaluationState
 
 
 class BaseValidator:

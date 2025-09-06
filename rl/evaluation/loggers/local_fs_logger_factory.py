@@ -1,6 +1,6 @@
 import pathlib
 
-from rl.evaluation.loggers import BaseLoggerFactory
+from rl.evaluation.loggers.base_logger_factory import BaseLoggerFactory
 from rl.evaluation.loggers.local_fs_logger import LocalFSLogger
 
 

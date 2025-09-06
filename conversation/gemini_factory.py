@@ -2,7 +2,7 @@ import os
 
 from openai import OpenAI, _types
 
-from conversation import BaseConversationFactory
+from conversation.base_conversation_factory import BaseConversationFactory
 from conversation.openai_conversation import OpenAIConversation
 
 

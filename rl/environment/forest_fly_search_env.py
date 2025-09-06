@@ -1,16 +1,19 @@
 from time import sleep
 from typing import Dict
 
+from glimpse_generators.unreal_client_wrapper import UnrealClientWrapper
 from misc.unreal_utils import get_forest_env_binary
-from scenarios.object_classes import BaseObjectClass, ForestEnvPCGClass, ForestSunClass
-
-from glimpse_generators import UnrealClientWrapper
-from rl.environment import BaseFlySearchEnv
+from rl.environment.base_fly_search_env import BaseFlySearchEnv
+from scenarios.object_classes.base_object_class import BaseObjectClass
+from scenarios.object_classes.env_pcg_class import ForestEnvPCGClass
+from scenarios.object_classes.forest_sun_class import SunClass
 
 
 class ForestFlySearchEnv(BaseFlySearchEnv):
-    def __init__(self, resolution: int = 500, max_altitude: int = 120, throw_if_hard_config: bool = True):
-        super().__init__(resolution=resolution, max_altitude=max_altitude, throw_if_hard_config=throw_if_hard_config)
+    def __init__(self, resolution: int = 500, max_altitude: int = 120, throw_if_hard_config: bool = True,
+                 give_class_image=False):
+        super().__init__(resolution=resolution, max_altitude=max_altitude, throw_if_hard_config=throw_if_hard_config,
+                         give_class_image=give_class_image)
 
     def get_client(self) -> UnrealClientWrapper:
         forest_binary_path = get_forest_env_binary()
@@ -38,7 +41,7 @@ class ForestFlySearchEnv(BaseFlySearchEnv):
         if "sun_y" in options and "sun_z" in options:
             sun_y = options["sun_y"]
             sun_z = options["sun_z"]
-            sun_class: ForestSunClass = self.classes_to_ids["SUN"]
+            sun_class: SunClass = self.classes_to_ids["SUN"]
             sun_class.set_sun_rotation(sun_y, sun_z)
 
         if "regenerate_forest" in options and options["regenerate_forest"]:

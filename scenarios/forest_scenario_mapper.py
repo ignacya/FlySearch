@@ -1,9 +1,7 @@
-import random
-
 from enum import Enum
 from typing import Tuple, Dict, Any
 
-from scenarios import BaseScenarioMapper
+from scenarios.base_scenario_mapper import BaseScenarioMapper
 
 
 class ForestScenarioMapper(BaseScenarioMapper):
@@ -15,9 +13,19 @@ class ForestScenarioMapper(BaseScenarioMapper):
         PERSON = 4
         ANOMALY = 5
 
-    def __init__(self, object_probs: dict[ObjectType | Tuple, float], x_min: float, x_max: float, y_min: float,
-                 y_max: float, z_min: float, z_max: float, drone_z_rel_min: float, drone_z_rel_max: float,
-                 alpha: float = 0.5):
+    def __init__(
+            self,
+            object_probs: dict[ObjectType | Tuple, float],
+            x_min: float,
+            x_max: float,
+            y_min: float,
+            y_max: float,
+            z_min: float,
+            z_max: float,
+            drone_z_rel_min: float,
+            drone_z_rel_max: float,
+            alpha: float = 0.5,
+    ):
         super().__init__(object_probs, ForestScenarioMapper.ObjectType)
 
         self.x_min = x_min
@@ -39,9 +47,13 @@ class ForestScenarioMapper(BaseScenarioMapper):
 
         object_type = self.sample_object_from_object_probs()
 
-        drone_z = self.sample_value_between(object_z + self.drone_z_rel_min, object_z + self.drone_z_rel_max)
+        drone_z = self.sample_value_between(
+            object_z + self.drone_z_rel_min, object_z + self.drone_z_rel_max
+        )
 
-        drone_x, drone_y = ForestScenarioMapper.sample_drone_position(object_x, object_y, drone_z, alpha=self.alpha)
+        drone_x, drone_y = ForestScenarioMapper.sample_drone_position(
+            object_x, object_y, drone_z, alpha=self.alpha
+        )
 
         drone_x = drone_x - object_x
         drone_y = drone_y - object_y
@@ -68,7 +80,7 @@ class ForestScenarioMapper(BaseScenarioMapper):
             "sun_y": sun_y,
             "sun_z": sun_z,
             "regenerate_forest": True,
-            "set_object": True
+            "set_object": True,
         }
 
     def get_description(self, object_type):
@@ -76,25 +88,3 @@ class ForestScenarioMapper(BaseScenarioMapper):
             return f"a {super().get_description(object_type)}"
         else:
             return "an object that doesn't fit in with the rest of the environment (an anomaly)"
-
-
-def main():
-    fsm = ForestScenarioMapper(
-        x_min=-25600,
-        x_max=102400,
-        y_min=-25600,
-        y_max=102400,
-        z_min=0,
-        z_max=1,
-        drone_z_rel_min=3000,
-        drone_z_rel_max=10000,
-        object_probs={
-            (ForestScenarioMapper.ObjectType.FOREST_FIRE, ForestScenarioMapper.ObjectType.CAMPSITE): 1.0,
-        }
-    )
-
-    print(fsm.create_random_scenario(3))
-
-
-if __name__ == "__main__":
-    main()

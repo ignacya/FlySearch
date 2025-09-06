@@ -1,7 +1,9 @@
 from typing import Dict
 from PIL import Image
 
-from conversation import BaseConversationFactory, Role, GPTFactory
+from conversation.abstract_conversation import Role
+from conversation.base_conversation_factory import BaseConversationFactory
+from conversation.gpt_factory import GPTFactory
 from rl.agents.semantic_units import BaseSemanticSubunit
 
 

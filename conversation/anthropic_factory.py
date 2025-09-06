@@ -1,6 +1,6 @@
 import os
 
-from conversation import AnthropicConversation
+from conversation.anthropic_conversation import AnthropicConversation
 
 
 class AnthropicFactory:

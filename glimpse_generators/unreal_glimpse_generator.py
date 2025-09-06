@@ -1,11 +1,11 @@
-from typing import Tuple
-import numpy as np
-
-from glimpse_generators import UnrealClientWrapper
 from time import sleep
+from typing import Tuple
+
+import numpy as np
 from PIL import Image
 
-from conversation import Role
+from conversation.abstract_conversation import Role
+from glimpse_generators.unreal_client_wrapper import UnrealClientWrapper
 from misc.add_guardrails import dot_matrix_two_dimensional_unreal
 from misc.cv2_and_numpy import opencv_to_pil, pil_to_opencv
 

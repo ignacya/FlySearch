@@ -2,10 +2,11 @@ import statistics
 from typing import List, Tuple
 
 import numpy as np
-
 from PIL import Image, ImageDraw
 
-from conversation import BaseConversationFactory, Role, GPTFactory
+from conversation.abstract_conversation import Role
+from conversation.base_conversation_factory import BaseConversationFactory
+from conversation.gpt_factory import GPTFactory
 from rl.agents.semantic_units.detection_specialist import BaseDetector
 
 

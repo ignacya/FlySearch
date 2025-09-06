@@ -1,4 +1,4 @@
-class ForestSunClass:
+class SunClass:
     def __init__(self, sun_id, client):
         self.sun_id = sun_id
         self.client = client

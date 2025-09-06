@@ -1,7 +1,9 @@
-from glimpse_generators import UnrealClientWrapper, UnrealGridGlimpseGenerator
-from rl.environment import BaseFlySearchEnv
-from PIL import Image
 import numpy as np
+from PIL import Image
+
+from glimpse_generators.unreal_client_wrapper import UnrealClientWrapper
+from glimpse_generators.unreal_glimpse_generator import UnrealGridGlimpseGenerator
+from rl.environment.base_fly_search_env import BaseFlySearchEnv
 
 
 class MockClient(UnrealClientWrapper):

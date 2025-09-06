@@ -2,7 +2,7 @@ from typing import Dict
 
 from PIL import Image
 
-from conversation import Role
+from conversation.abstract_conversation import Role
 from rl.agents.semantic_units import BaseSemanticSubunit
 
 

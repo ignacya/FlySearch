@@ -5,9 +5,9 @@ import shutil
 from typing import List
 from PIL import Image
 
-from misc import opencv_to_pil
-from rl.evaluation import EvaluationState
-from rl.evaluation.loggers import BaseLogger
+from misc.cv2_and_numpy import opencv_to_pil
+from rl.evaluation.evaluation_state import EvaluationState
+from rl.evaluation.loggers.base_logger import BaseLogger
 
 
 class LocalFSLogger(BaseLogger):

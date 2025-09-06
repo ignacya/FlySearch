@@ -1,7 +1,9 @@
 import os
 
 from openai import OpenAI
-from conversation import OpenAIConversation
+
+from conversation.openai_conversation import OpenAIConversation
+
 
 class VLLMFactory:
     def __init__(self, model_name: str):

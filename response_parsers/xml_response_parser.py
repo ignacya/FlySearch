@@ -13,7 +13,7 @@ class ModelResponse:
     move: Tuple[float, float, float] = (0, 0, 0)
 
 
-XML_RESPONSE_PATTERN = re.compile(r'^.*?<action>(.*?)</action>.*$', flags=re.DOTALL)
+XML_RESPONSE_PATTERN = re.compile(r"^.*?<action>(.*?)</action>.*$", flags=re.DOTALL)
 
 
 def parse_xml_response(model_response: str) -> ModelResponse:
@@ -21,7 +21,7 @@ def parse_xml_response(model_response: str) -> ModelResponse:
     match = XML_RESPONSE_PATTERN.match(model_response)
 
     if not match:
-        if 'found' in model_response:
+        if "found" in model_response:
             # If the response contains 'found' but doesn't match the XML pattern, assume it's a found action
             return ModelResponse(found=True)
 
@@ -29,7 +29,7 @@ def parse_xml_response(model_response: str) -> ModelResponse:
 
     action = match.group(1).strip()
 
-    if 'found' in action:
+    if "found" in action:
         return ModelResponse(found=True)
 
     try:
