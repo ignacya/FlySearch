@@ -37,6 +37,28 @@ def download_with_progress(url, filepath):
         urllib.request.urlretrieve(url, filepath, reporthook=reporthook)
 
 
+def extract_tar_gz(file_path: str, output_dir: str):
+    file_path = Path(file_path)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    with tarfile.open(file_path, "r:gz") as tar:
+        members = tar.getmembers()
+        total_size = sum(
+            m.size for m in members if m.isreg()
+        )
+
+        with Progress() as progress:
+            task = progress.add_task(
+                f"[cyan]Extracting {file_path.name}...", total=total_size
+            )
+
+            for member in members:
+                tar.extract(member, output_dir)
+                if member.isreg():
+                    progress.update(task, advance=member.size)
+
+
 def get_city_env_binary():
     return _get_unreal_binary(
         env_variable_name="CITY_BINARY_PATH",
@@ -48,7 +70,7 @@ def get_city_env_binary():
 def get_forest_env_binary():
     return _get_unreal_binary(
         env_variable_name="FOREST_BINARY_PATH",
-        linux_exec_path="Linux/ElectricDreamsSample/Binaries/Linux/ElectricDreamsSample",
+        linux_exec_path="Linux/ElectricDreamsEnv/Binaries/Linux/ElectricDreamsSample",
         linux_download_url="https://zenodo.org/records/15428224/files/Forest.tar.gz?download=1",
     )
 
@@ -119,8 +141,7 @@ def _get_unreal_binary(
 
         print("Download complete. Extracting...")
 
-        with tarfile.open(tar_path, "r:gz") as tar:
-            tar.extractall(store_path)
+        extract_tar_gz(tar_path, store_path)
 
         # Clean up temporary file
         os.remove(tar_path)
