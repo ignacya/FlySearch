@@ -154,8 +154,7 @@ class MimicScenarioMapper(BaseScenarioMapper):
         object_type_cls = self.scenarios[0]["object_type"]
 
         # TODO: make better abstraction for this on refactor.
-        self.difficulty = DifficultySettings.FS_2 if self.scenarios[0][
-                                                         "difficulty"] == 'FS2' else DifficultySettings.FS_1
+        self.difficulty = DifficultySettings.FS_2 if self.scenarios[0].get("difficulty") == 'FS2' else DifficultySettings.FS_1
         self.is_city = type(object_type_cls) is CityScenarioMapper.ObjectType
 
         super().__init__({}, type(object_type_cls))
