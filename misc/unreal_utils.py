@@ -44,9 +44,7 @@ def extract_tar_gz(file_path: str, output_dir: str):
 
     with tarfile.open(file_path, "r:gz") as tar:
         members = tar.getmembers()
-        total_size = sum(
-            m.size for m in members if m.isreg()
-        )
+        total_size = sum(m.size for m in members if m.isreg())
 
         with Progress() as progress:
             task = progress.add_task(
@@ -64,6 +62,7 @@ def get_city_env_binary():
         env_variable_name="CITY_BINARY_PATH",
         linux_exec_path="Linux/CitySample/Binaries/Linux/CitySample",
         linux_download_url="https://zenodo.org/records/15428224/files/City.tar.gz?download=1",
+        name="City",
     )
 
 
@@ -72,13 +71,12 @@ def get_forest_env_binary():
         env_variable_name="FOREST_BINARY_PATH",
         linux_exec_path="Linux/ElectricDreamsEnv/Binaries/Linux/ElectricDreamsSample",
         linux_download_url="https://zenodo.org/records/15428224/files/Forest.tar.gz?download=1",
+        name="Forest",
     )
 
 
 def _get_unreal_binary(
-    env_variable_name: str,
-    linux_exec_path: str,
-    linux_download_url: str,
+    env_variable_name: str, linux_exec_path: str, linux_download_url: str, name: str
 ):
     # Check if environment variable is defined and not empty
     env_path = os.getenv(env_variable_name)
@@ -105,6 +103,8 @@ def _get_unreal_binary(
         # Default to project_root/simulator
         project_root = Path(__file__).parent.parent
         store_path = str(project_root / "simulator")
+
+    store_path = os.path.join(store_path, name)
 
     # Check if binary exists in store path
     binary_path = os.path.join(store_path, linux_exec_path)
