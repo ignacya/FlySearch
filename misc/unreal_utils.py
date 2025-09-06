@@ -17,15 +17,15 @@ from rich.progress import (
 
 def download_with_progress(url, filepath):
     with Progress(
-        TextColumn("[bold blue]{task.description}", justify="right"),
-        BarColumn(bar_width=None),
-        "[progress.percentage]{task.percentage:>3.1f}%",
-        "•",
-        DownloadColumn(),
-        "•",
-        TransferSpeedColumn(),
-        "•",
-        TimeRemainingColumn(),
+            TextColumn("[bold blue]{task.description}", justify="right"),
+            BarColumn(bar_width=None),
+            "[progress.percentage]{task.percentage:>3.1f}%",
+            "•",
+            DownloadColumn(),
+            "•",
+            TransferSpeedColumn(),
+            "•",
+            TimeRemainingColumn(),
     ) as progress:
         task = progress.add_task("Downloading", total=None)
 
@@ -41,15 +41,20 @@ def extract_tar_gz(file_path: str, output_dir: str):
     file_path = Path(file_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-
-    with tarfile.open(file_path, "r:gz") as tar:
-        members = tar.getmembers()
-        total_size = sum(m.size for m in members if m.isreg())
-
-        with Progress() as progress:
-            task = progress.add_task(
-                f"[cyan]Extracting {file_path.name}...", total=total_size
-            )
+    with Progress(
+            TextColumn("[bold blue]{task.description}", justify="right"),
+            BarColumn(bar_width=None),
+            "[progress.percentage]{task.percentage:>3.1f}%",
+            "•",
+            TimeRemainingColumn(),
+    ) as progress:
+        task = progress.add_task(
+            f"Extracting", total=None
+        )
+        with tarfile.open(file_path, "r:gz") as tar:
+            members = tar.getmembers()
+            total_size = sum(m.size for m in members if m.isreg())
+            progress.update(task, total=total_size)
 
             for member in members:
                 tar.extract(member, output_dir)
@@ -76,7 +81,7 @@ def get_forest_env_binary():
 
 
 def _get_unreal_binary(
-    env_variable_name: str, linux_exec_path: str, linux_download_url: str, name: str
+        env_variable_name: str, linux_exec_path: str, linux_download_url: str, name: str
 ):
     # Check if environment variable is defined and not empty
     env_path = os.getenv(env_variable_name)

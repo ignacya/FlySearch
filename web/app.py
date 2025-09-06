@@ -9,16 +9,18 @@ import time
 from typing import Optional
 
 import numpy as np
-from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
+from fastapi.middleware.cors import CORSMiddleware
+
+from rl.environment.base_fly_search_env import DroneCannotSeeTargetException
+from rl.environment.city_fly_search_env import CityFlySearchEnv
+from scenarios.default_city_scenario_mapper import DefaultCityScenarioMapper
 
 sys.path.insert(0, '../')
 
 from fastapi import FastAPI, Response, status
 from pydantic import BaseModel
 
-from rl.environment import DroneCannotSeeTargetException, CityFlySearchEnv
-from scenarios import DefaultCityScenarioMapper
 
 app = FastAPI()
 env = CityFlySearchEnv(throw_if_hard_config=False, max_altitude=250)

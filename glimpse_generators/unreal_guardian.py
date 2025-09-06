@@ -38,14 +38,14 @@ class UnrealGuardian:
         self._start_unreal()
 
     def _create_logfile(self, log_dir_env_var: str) -> IO[str]:
-        base_file_name = datetime.now().strftime("%Y-%m-%d-%H:%M:%S-FlySearchUnrealLog")
+        base_file_name = datetime.now().strftime("%Y-%m-%d-%H:%M:%S-FlySearchUnreal.log")
 
         env_dir = os.environ.get(log_dir_env_var)
         if env_dir and env_dir.strip():
             base_path = pathlib.Path(env_dir.strip())
         else:
             # Default to project root
-            base_path = pathlib.Path(__file__).parent.parent
+            base_path = pathlib.Path(__file__).parent.parent / "unreal_logs"
 
         base_path.mkdir(exist_ok=True, parents=True)
         return open(base_path / base_file_name, "w")
