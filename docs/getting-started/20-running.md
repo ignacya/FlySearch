@@ -3,15 +3,9 @@
 ## API keys
 
 To use closed-source VLMs, you need to have an API key. To configure them, set appropriate variables in the
-`.env` file.
+`.env` file. See the Setup guide for more details.
 
 ## Running FlySearch
-
-We present examples on how to run FlySearch benchmark in the `examples` directory.
-
-- `mimic.sh` contains 3 examples of how to run different models on FS-1, FS-Anomaly-1 and FS-2.
-- `create_new.sh` contains 3 examples of how to sample new scenarios from distribution of scenarios used in FS-1, FS-Anomaly-1 and FS-2. 
-If you just want to test a model on our benchmark, we recommend using `mimic.sh`.
 
 
 ### Direct `drone.py` script usage

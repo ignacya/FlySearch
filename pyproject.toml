@@ -30,4 +30,5 @@ webgui = [
 [dependency-groups]
 dev = [
     "pytest>=8.4.1",
+    "mkdocs-material[imaging]>=9.6.20"
 ]

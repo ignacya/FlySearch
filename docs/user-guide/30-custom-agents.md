@@ -78,31 +78,6 @@ We also provide examples of different, less trivial agents (that unfortunately d
 
 ## Contributing
 
-If you've implemented your own agent and its respective factory, you can test it in our environment by adding it to `arg_resolvers/agent_factory_resolver.py`:
-
-```python
-class AgentFactoryResolver(BaseArgResolver):
-    def register_args(self, parser):
-        parser.add_argument("--agent", type=str, required=True,
-                            choices=["YOUR_AGENT_NAME_GOES_HERE", "simple_llm", "description_llm", "generalist_one",
-                                     "detection_driven_description_llm", "detection_cheater_factory", "parsing_error"], )
-
-    def resolve_args(self, args, accumulator):
-        if args.agent == "simple_llm":
-            agent_factory = SimpleLLMAgentFactory(
-                conversation_factory=accumulator["conversation_factory"],
-            )
-        elif args.agent == "YOUR_AGENT_NAME_GOES_HERE":
-            agent_factory = YOUR_AGENT_FACTORY(
-                conversation_factory=accumulator["conversation_factory"],
-            )
-        elif args.agent == "description_llm":
-            agent_factory = DescriptionLLMAgentFactory(
-                conversation_factory=accumulator["conversation_factory"],
-            )
-        ...
-```
-
-(_Note on the accumulator_: The resolve_args function receives an _accumulator_ dictionary, which holds other components that have already been constructed based on the script's arguments, such as the `conversation_factory` -- this is the design pattern for argument resolving I've came up with while working on this repo, but I think it works pretty well. This knowledge may be useful to you while tinkering with different arguments as well.)
+If you've implemented your own agent and its respective factory, you can test it in our environment by adding it to `conversation/conversation.py`.
 
 Happy contributing!

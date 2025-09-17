@@ -50,6 +50,15 @@ extra:
 nav:
   - The benchmark: index.md
   - Getting started:
-      - Setup: getting_started/10_setup.md
-      - Running the benchmark: getting_started/20_running.md
-      - Evaluating results: getting_started/30_evaluating.md
+      - Setup: getting-started/10-setup.md
+      - Running the benchmark: getting-started/20-running.md
+      - Evaluating results: getting-started/30-evaluating.md
+  - User guide:
+      - Result analysis: user-guide/20-result-analysis.md
+      - Adding new models: user-guide/30-custom-agents.md
+  - Internals:
+      - Environment: internals/10-environment.md
+      - Conversation: internals/20-conversation.md
+      - Custom environments: internals/30-custom-environments.md
+      - Custom assets: internals/40-custom-assets.md
+      - Building Unreal: internals/50-building-unreal.md

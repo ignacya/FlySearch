@@ -160,7 +160,7 @@ Can Vision-Language Models (VLMs) perform active, goal-driven exploration of rea
   embodied agents in complex, unstructured settings.
 * **A suite of object-based exploration challenges** designed to isolate and measure the
   exploration capabilities of VLMs and humans in open-world scenarios.
-* **Procedurally generated.** We can generate an infinite number of vastly diferent test scenarios.
+* **Procedurally generated.** We can generate an infinite number of vastly different test scenarios.
 * **Easy to solve for a human, while challenging for popular VLMs.** We identify consistent failure
   modes across vision, grounding, and reasoning.
 
@@ -192,7 +192,7 @@ We define three levels of difficulty of FlySearch and provide a test set of gene
 * **FS-2:** The object can be hidden behind buildings or be far away from the staring position. Additional visual
   preview of the object is given to the model at the start.
 
-## Evalutaion pipeline
+## Evaluation pipeline
 
 FlySearch consists of three parts besides the vision-language model: the simulator, the evaluation controller, and the
 scenario generator.

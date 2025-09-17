@@ -1,4 +1,4 @@
-# Environment usage 
+# Direct environment usage 
 
 ## Basics
 

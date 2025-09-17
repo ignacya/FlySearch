@@ -27,7 +27,7 @@ We recommend using a machine with at least 32GB of RAM and a modern CPU (e.g. AM
 
 We've verified that the benchmark works on Ubuntu 22.04, Archlinux (2025), and Rocky Linux 9.6, but it should work on any modern Linux distribution.
 
-Unreal Engine 5 supports Windows and MacOS as well, but we haven't tested the benchmark on these operating systems, nor provide compiled binaries for them. You will need to compile the UE5 environments yourself if you want to run the benchmark on Windows or MacOS.
+Unreal Engine 5 supports Windows and macOS as well, but we haven't tested the benchmark on these operating systems, nor provide compiled binaries for them. You will need to compile the UE5 environments yourself if you want to run the benchmark on Windows or macOS.
 
 ### Python environment 
 
