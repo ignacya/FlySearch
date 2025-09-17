@@ -6,7 +6,7 @@ hide:
 ---
 
 <div style="text-align: center; margin-bottom: 3em;" markdown>
-![Logo](imgs/logo.png){width="50%"}
+![Logo](imgs/logo.jpg){width="50%"}
 <h1 style="margin-bottom: 0.1em !important;">FlySearch: Exploring how vision-language models explore</h1>
 
 Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliński, Maciej Wołczyk

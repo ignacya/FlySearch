@@ -1,6 +1,6 @@
 <p style="text-align: center">
   <a href="https://arxiv.org/abs/2506.02896">
-    <img src="docs/imgs/logo.png" width="50%" alt="FlySearch" />
+    <img src="docs/imgs/logo.jpg" width="50%" alt="FlySearch" />
   </a>
 </p>
 
@@ -21,7 +21,7 @@ The real world is messy and unstructured. Uncovering critical information often 
 
 ### Hardware
 
-We recommend using a machine with at least 32GB of RAM and a modern CPU (e.g. AMD Ryzen 7 5800X3D or Intel i7 13700K). A ray-tracing capable GPU is required to run the Unreal Engine 5 (UE5) binaries. We've tested the benchmark on NVIDIA RTX 4060 and 4080 GPUs, as well NVIDIA A100. Vulkan drivers need to be installed for the GPU to work with UE5.
+We recommend using a machine with at least 32GB of RAM and a modern CPU (e.g. AMD Ryzen 7 5800X3D or Intel i7 13700K). A ray-tracing capable GPU is required to run the Unreal Engine 5 (UE5) binaries. We've tested the benchmark on NVIDIA RTX 4060 and 4080 GPUs, as well NVIDIA A100. Vulkan drivers need to be installed for the GPU to work with UE5. Make sure you have at least 60GB free storage space (preferable SSD or RAM-cached HDD).
 
 ### Operating system
 
@@ -41,11 +41,11 @@ Before proceeding, you need to create a `.env` file in the root directory of thi
 cp .env-example .env
 ```
 
-You will need to edit the `.env` file so that it contains your local variables (mainly API keys).
+You will need to edit the `.env` file so that it contains your local variables (e.g. API keys and URLs).
 
 ### Benchmark binaries
 
-FlySearch will automatically download Unreal Engine binaries on Linux. We do not provide pre-compiled simulator for other platforms, so you will need to build it yourself.
+FlySearch will automatically download Unreal Engine binaries on Linux. We do not provide pre-compiled simulator for other platforms, so you will need to build it yourself (see documentation).
 
 
 ## Running FlySearch
@@ -60,14 +60,6 @@ See `uv run flyserach.py --help` for a list of all options.
 
 More details in the documentation.
 
-### Models 
-
-FlySearch supports testing several models. To test them, you can use on of our examples (discussed in the `Examples` section) and change the `model` parameter appropriately:
-* OpenAI models. To use it, prefix your model argument with `oai-` and then use OpenAI's model name (e.g. `oai-gpt-4o`).
-* Gemini family models (e.g. gemini-2.0-flash. To use it, set `model` flag to `gemini-2.0-flash`). Note that we use Gemini models using compatibility mode with OpenAI format -- as of now, this unfortunately tends to fail with Gemini 2.5 Pro. Pull requests fixing that issue are welcome.
-* Anthropic models. To use it, prefix the model name with `anthropic-`, e.g. `anthropic-claude-3-5-sonnet-20241022`.
-* Any models behind a VLLM API. If model name does not match any of the above, it is assumed to be a VLLM model. OpenAI protocol is used to communicate with the model. For example, to use Gemma3-27b hosted on [DeepInfra](https://deepinfra.com/), you need to configure `.env` file with `VLLM_ADDRESS = 'https://api.deepinfra.com/v1/openai'`, `VLLM_KEY` matching your DeepInfra API key, and set `model` to `google/gemma-3-27b-it`.
-
 ## Result analysis
 
 To read how to analyse logs from FlySearch, please see the documentation.
@@ -78,6 +70,13 @@ To read how to analyse logs from FlySearch, please see the documentation.
 ### UE5 binary crashes 
 
 The UE5 binary can sometimes spontaneously crash, usually when generating new scenarios. The code is designed to handle this (we've modified UnrealCV's code to do so), but in case it happens you just need to restart the script with appropriately set `continue_from_idx` flag. Furthermore, in case where your code was terminated by `UnrealDiedException` please open an issue here with a stack trace (or email us with it).
+
+## License and legal
+
+Our benchmark code is released under the MIT License.
+
+FlySearch uses Unreal® Engine. Unreal® is a trademark or registered trademark of Epic Games, Inc. in the United States of America and elsewhere. See Unreal Engine EULA for more information [https://www.unrealengine.com/en-US/eula/unreal](https://www.unrealengine.com/en-US/eula/unreal).
+
 
 ## Citation
 If you use FlySearch in your research, please cite the following paper:
