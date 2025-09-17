@@ -33,12 +33,12 @@
       <v-container>
 
         <v-card variant="outlined" class="mt-4">
-          <v-card-title>Scenario Params</v-card-title>
+          <v-card-title>Scenario params</v-card-title>
           <v-card-text>
             <div v-if="scenarioParams.length === 0" class="text-medium-emphasis">No parameters to display.</div>
             <div v-else>
               <div>
-                <span class="text-medium-emphasis">passed_object_name:</span>
+                <span class="text-medium-emphasis">Object name:</span>
                 <span class="ml-2">{{ passedObjectName }}</span>
               </div>
               <v-expansion-panels class="mt-3" density="compact">
@@ -82,7 +82,7 @@
                 <v-avatar size="48">
                   <v-icon icon="mdi-robot" size="32" />
                 </v-avatar>
-                <div class="text-caption mt-n1">Assistant</div>
+                <div class="text-caption mt-n1">Agent</div>
               </div>
               <div v-if="!msg.isImage" class="bubble" :class="msg.role">
                 <div v-if="msg.isLong && !msg.expanded">
@@ -122,9 +122,9 @@
               </div>
               <div v-if="msg.role === 'user'" class="d-flex flex-column align-center ml-3">
                 <v-avatar size="48">
-                  <v-icon icon="mdi-account" size="32" />
+                  <v-icon icon="mdi-quadcopter" size="32" />
                 </v-avatar>
-                <div class="text-caption mt-n1">User</div>
+                <div class="text-caption mt-n1">Benchmark</div>
               </div>
             </div>
             <div v-if="conversation.length === 0" class="text-medium-emphasis mt-2">No conversation to display.</div>
@@ -144,7 +144,7 @@
         </v-card>
 
         <v-card v-if="selectedRun && selectedEpisode" variant="outlined" class="mt-4">
-          <v-card-title>Run Preview</v-card-title>
+          <v-card-title>Trajectory preview</v-card-title>
           <v-card-text>
             <v-img
               :src="previewUrl(selectedRun, selectedEpisode)"
