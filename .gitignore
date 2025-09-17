@@ -14,3 +14,4 @@ analysis/report_generation/*.tex
 all_logs/
 .cache/
 .pytest_cache/
+web/trajectories

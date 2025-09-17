@@ -12,15 +12,16 @@ import numpy as np
 from PIL import Image
 from fastapi.middleware.cors import CORSMiddleware
 
+sys.path.insert(0, '../')
+
 from rl.environment.base_fly_search_env import DroneCannotSeeTargetException
 from rl.environment.city_fly_search_env import CityFlySearchEnv
+from rl.environment.mock_fly_search_env import MockFlySearchEnv
 from scenarios.default_city_scenario_mapper import DefaultCityScenarioMapper
-
-sys.path.insert(0, '../')
 
 from fastapi import FastAPI, Response, status
 from pydantic import BaseModel
-
+import uvicorn
 
 app = FastAPI()
 env = CityFlySearchEnv(throw_if_hard_config=False, max_altitude=250)
@@ -172,7 +173,7 @@ async def get_observation(client_uuid: str, response: Response) -> Optional[Obse
     else:
         rgb_image = opencv_image
     pil_image = Image.fromarray(rgb_image)
-    
+
     # Encode to JPEG using PIL
     buffer = io.BytesIO()
     pil_image.save(buffer, format='JPEG', quality=95)
@@ -436,7 +437,9 @@ async def complain(client_uuid: str, request: ReportRequest, response: Response)
     complaints.append(request.report)
 
 
-if __name__ == "__main__":
-    import uvicorn
+def run_webapp(host="localhost", port=8000):
+    print(f"Starting webapp on {host}:{port}", file=sys.stderr)
+    uvicorn.run(app, host=host, port=port)
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    run_webapp()

@@ -42,12 +42,12 @@ export default defineConfig({
             /** custom certification directory */
             certDir: '/tmp/cert'
         }),
-        httpAuth([{
-            username: 'flysearch',
-            password: 'vlmBenchmark2025'
-        }], {
-            realm: 'flysearch',
-        })
+        // httpAuth([{
+        //     username: 'flysearch',
+        //     password: 'vlmBenchmark2025'
+        // }], {
+        //     realm: 'flysearch',
+        // })
     ],
     define: {'process.env': {}},
     resolve: {
