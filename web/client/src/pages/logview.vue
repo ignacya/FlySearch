@@ -314,19 +314,25 @@ function fetchConversation(run, episode) {
     .then((data) => {
       const msgs = Array.isArray(data) ? data : []
       let imageCounter = 0
-      conversation.value = msgs.map((m) => {
+      conversation.value = msgs.reduce((acc, m) => {
         const role = normalizeRole(m[0])
         const text = m[1]
         if (text === 'image') {
           const idx = imageCounter
           imageCounter += 1
-          return { role, text, isImage: true, imageIndex: idx }
+          acc.push({ role, text, isImage: true, imageIndex: idx })
+          return acc
         }
         const cleaned = typeof text === 'string' ? text.replace(/^[\r\n]+|[\r\n]+$/g, '') : String(text)
+        // Hide lines like "Image 12:" from conversation view
+        if (/^\s*Image\s+\d+:\s*$/.test(cleaned)) {
+          return acc
+        }
         const isLong = cleaned.length > 500
         const preview = isLong ? cleaned.slice(0, 500) + '…' : cleaned
-        return { role, text: cleaned, isImage: false, isLong, expanded: false, preview }
-      })
+        acc.push({ role, text: cleaned, isImage: false, isLong, expanded: false, preview })
+        return acc
+      }, [])
     })
     .catch((err) => {
       console.error(err)
