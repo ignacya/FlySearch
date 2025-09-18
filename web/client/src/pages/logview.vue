@@ -1,3 +1,4 @@
+<!-- vibe coded -->
 <template>
   <v-app>
     <v-app-bar elevation="1">
@@ -14,6 +15,7 @@
             :loading="loadingRuns"
             :disabled="loadingRuns || runs.length === 0"
             @update:model-value="onRunChange"
+            width="240"
           />
           <v-select
             v-model="selectedEpisode"
@@ -25,6 +27,7 @@
             :loading="loadingEpisodes"
             :disabled="loadingEpisodes || episodes.length === 0"
             @update:model-value="onEpisodeChange"
+            width="240"
           />
         </div>
       </div>
@@ -32,7 +35,16 @@
     <v-main>
       <v-container>
 
-        <v-card variant="outlined" class="mt-4">
+        <v-alert
+          v-if="!selectedRun || !selectedEpisode"
+          type="info"
+          variant="tonal"
+          class="mt-4"
+        >
+          Please select a Run and an Episode to view details.
+        </v-alert>
+
+        <v-card v-if="scenarioParams.length > 0" variant="outlined" class="mt-4">
           <v-card-title>Scenario params</v-card-title>
           <v-card-text>
             <div v-if="scenarioParams.length === 0" class="text-medium-emphasis">No parameters to display.</div>
@@ -69,7 +81,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card variant="outlined" class="mt-4">
+        <v-card v-if="conversation.length > 0" variant="outlined" class="mt-4">
           <v-card-title>Conversation</v-card-title>
           <v-card-text>
             <div
@@ -163,6 +175,9 @@
         </v-card>
       </v-container>
     </v-main>
+    <v-footer app elevation="1" class="justify-center">
+      <div class="text-caption">© {{ currentYear }} — FlySearch authors</div>
+    </v-footer>
   </v-app>
 </template>
 
@@ -184,6 +199,8 @@ const scenarioParams = ref([])
 const conversation = ref([])
 const successState = ref(null)
 
+const currentYear = new Date().getFullYear()
+
 const passedObjectName = computed(() => {
   const found = scenarioParams.value.find(([k]) => k === 'passed_object_name')
   return found ? found[1] : '—'
@@ -200,7 +217,6 @@ function fetchRuns() {
       .then(r => r.json())
       .then((idx) => {
         runs.value = (idx.runs || []).map(r => r.name)
-        if (runs.value.length > 0 && !selectedRun.value) selectedRun.value = runs.value[0]
       })
       .catch(console.error)
       .finally(() => loadingRuns.value = false)
@@ -209,9 +225,6 @@ function fetchRuns() {
   axios.get(base + '/runs')
     .then((res) => {
       runs.value = res.data || []
-      if (runs.value.length > 0 && !selectedRun.value) {
-        selectedRun.value = runs.value[0]
-      }
     })
     .catch((err) => {
       console.error(err)
@@ -234,7 +247,6 @@ function fetchEpisodes(run) {
       .then((idx) => {
         const r = (idx.runs || []).find(x => x.name === run)
         episodes.value = r ? r.episodes : []
-        if (episodes.value.length > 0 && !selectedEpisode.value) selectedEpisode.value = episodes.value[0]
         if (selectedEpisode.value) {
           fetchScenarioParams(run, selectedEpisode.value)
           fetchConversation(run, selectedEpisode.value)
@@ -248,9 +260,6 @@ function fetchEpisodes(run) {
   axios.get(base + `/runs/${encodeURIComponent(run)}/episodes`)
     .then((res) => {
       episodes.value = res.data || []
-      if (episodes.value.length > 0 && !selectedEpisode.value) {
-        selectedEpisode.value = episodes.value[0]
-      }
       if (selectedEpisode.value) {
         fetchScenarioParams(run, selectedEpisode.value)
         fetchConversation(run, selectedEpisode.value)
