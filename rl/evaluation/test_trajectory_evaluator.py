@@ -1,9 +1,10 @@
 from typing import Dict
 
-from rl.agents import BaseAgent, BaseAgentFactory
-from rl.environment import DroneCannotSeeTargetException
+from rl.agents.base_agent import BaseAgent
+from rl.agents.base_agent_factory import BaseAgentFactory
+from rl.environment.base_fly_search_env import DroneCannotSeeTargetException
 from rl.evaluation.evaluation_state import EvaluationState
-from rl.evaluation.loggers import BaseLogger
+from rl.evaluation.loggers.base_logger import BaseLogger
 from rl.evaluation.trajectory_evaluator import TrajectoryEvaluator
 from rl.evaluation.validators.base_validator import BaseValidator
 
@@ -296,7 +297,7 @@ class TestTrajectoryEvaluator:
         assert len(env_mock.actions_passed) == 3
 
         assert (
-            len(logger.evaluation_states) == 6
+                len(logger.evaluation_states) == 6
         )  # There were always 2 action attempts per evaluation
         assert len(logger.termination_info) == 1
         assert logger.termination_info[0] == {"reason": "glimpses ran out"}

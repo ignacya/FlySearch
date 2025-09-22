@@ -1,13 +1,14 @@
 import pathlib
 
-from prompts import fs1_prompt
-from rl.agents import SimpleLLMAgentFactory
-from rl.environment import BaseFlySearchEnv
-from rl.evaluation.configs import ExperimentConfig
-from rl.evaluation.loggers import LocalFSLoggerFactory
-from rl.evaluation.validators import OutOfBoundsFlightValidatorFactory, AltitudeValidatorFactory
+from prompts.drone_prompt_generation import fs1_prompt
+from rl.agents.simple_llm_agent_factory import SimpleLLMAgentFactory
+from rl.environment.base_fly_search_env import BaseFlySearchEnv
+from rl.evaluation.configs.experiment_config import ExperimentConfig
+from rl.evaluation.loggers.local_fs_logger_factory import LocalFSLoggerFactory
+from rl.evaluation.validators.altitude_validator_factory import AltitudeValidatorFactory
+from rl.evaluation.validators.out_of_bounds_flight_validator_factory import OutOfBoundsFlightValidatorFactory
 from rl.evaluation.validators.reckless_flying_validator_factory import RecklessFlyingValidatorFactory
-from scenarios import BaseScenarioMapper
+from scenarios.base_scenario_mapper import BaseScenarioMapper
 
 
 class BasicConfig(ExperimentConfig):

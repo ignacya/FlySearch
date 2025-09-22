@@ -61,30 +61,3 @@ class DecisionMakingSpecialist(BaseSemanticSubunit):
         """
         information = self.process_information(information)
         return information["decision"]
-
-
-def main():
-    from conversation import GPTFactory
-    from rl.agents.semantic_units.action_space_specialist import ActionSpaceSpecialist
-
-    conversation_factory = GPTFactory()
-    action_space_specialist = ActionSpaceSpecialist(conversation_factory=conversation_factory)
-    image = Image.open("/home/dominik/MyStuff/active-visual-gpt/data/burger.png")
-
-    information = {
-        "image": image,
-        "target": "find something funny",
-        "previous_actions": ["humans are funny", "this table is kinda nice"],
-        "previous_rewards": [-10, -100],
-    }
-
-    actions = action_space_specialist.process_information(information)
-
-    decision_making_specialist = DecisionMakingSpecialist(conversation_factory=conversation_factory)
-
-    decision = decision_making_specialist.get_decision(actions)
-    print(decision)
-
-
-if __name__ == "__main__":
-    main()

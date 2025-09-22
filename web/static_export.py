@@ -2,19 +2,22 @@
 import argparse
 import json
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 # Headless rendering for matplotlib
 import matplotlib
+
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 # Ensure analysis import works when run from project root or web/
 import sys
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
-from analysis import Run, RunVisualiser  # noqa: E402
+from analysis.run import Run
+from analysis.run_visualiser import RunVisualiser
 
 
 def generate_preview_png(episode_dir: Path, out_file: Path) -> None:

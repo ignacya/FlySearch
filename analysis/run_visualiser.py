@@ -6,7 +6,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from analysis import Run
+from analysis.run import Run
 
 
 class RunVisualiser:

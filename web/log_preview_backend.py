@@ -3,18 +3,21 @@ import sys
 from pathlib import Path
 from typing import List
 
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
-import uvicorn
+
 sys.path.insert(0, '../')
-from analysis import Run, RunAnalyser
 
 # Use Agg backend for headless rendering and import pyplot/visualiser at module load
 import matplotlib
+
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
-from analysis import RunVisualiser
+from analysis.run import Run
+from analysis.run_analyser import RunAnalyser
+from analysis.run_visualiser import RunVisualiser
 
 
 def create_app(log_dir: Path) -> FastAPI:
@@ -124,12 +127,12 @@ def _default_logs_dir() -> Path:
 # When imported by `uvicorn web.log_preview_backend:app`, fall back to env/default dir
 app = create_app(_default_logs_dir())
 
-
 if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="FlySearch Log Preview API server")
-    parser.add_argument("--log-dir", type=str, default=str(_default_logs_dir()), help="Base directory containing log episodes")
+    parser.add_argument("--log-dir", type=str, default=str(_default_logs_dir()),
+                        help="Base directory containing log episodes")
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--reload", action="store_true")

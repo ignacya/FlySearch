@@ -3,7 +3,10 @@ from typing import List
 
 from matplotlib import pyplot as plt
 
-from analysis import Run, RunAnalyser, CriterionPlotter, load_all_runs_from_a_dir
+from analysis.criterion_plotter import CriterionPlotter
+from analysis.run import Run
+from analysis.run_analyser import RunAnalyser
+from analysis.utils import load_all_runs_from_a_dir
 
 CITY_CATEGORIES = ['road_construction_site', 'crowd', 'large_trash_pile', 'fire', 'car']
 FOREST_CATEGORIES = ['campsite', 'trash_pile', 'person', 'forest_fire', 'building']

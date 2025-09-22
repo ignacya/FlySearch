@@ -53,23 +53,3 @@ class ExecutionSpecialist(BaseSemanticSubunit):
         """
         information = self.process_information(information)
         return information["formatted_action"]
-
-
-def main():
-    from conversation import GPTFactory
-    from prompts import fs1_prompt
-
-    conversation_factory = GPTFactory()
-    execution_specialist = ExecutionSpecialist(conversation_factory=conversation_factory)
-
-    information = {
-        "instruction": fs1_prompt(10, "red pickup truck", 200),
-        "action": "descend by 50 meters",
-    }
-
-    formatted_action = execution_specialist.get_formatted_action(information)
-    print(formatted_action)
-
-
-if __name__ == "__main__":
-    main()

@@ -1,6 +1,6 @@
 import pathlib
 
-from analysis import convert_runs_from_dir_to_pandas
+from analysis.to_pandas import convert_runs_from_dir_to_pandas
 
 
 def main():

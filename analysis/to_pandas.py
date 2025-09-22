@@ -1,7 +1,10 @@
 import pathlib
+
 import pandas as pd
 
-from analysis import load_all_runs_from_a_dir, Run, RunAnalyser
+from analysis.run import Run
+from analysis.run_analyser import RunAnalyser
+from analysis.utils import load_all_runs_from_a_dir
 
 
 def convert_runs_from_dir_to_pandas(directory: pathlib.Path) -> pd.DataFrame:

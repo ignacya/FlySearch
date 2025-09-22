@@ -9,7 +9,9 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 sys.path.insert(0, '../../')  # This is done so that we can import from the analysis module. # FIXME
-from analysis import RunVisualiser, Run, RunAnalyser
+from analysis.run import Run
+from analysis.run_analyser import RunAnalyser
+from analysis.run_visualiser import RunVisualiser
 
 
 def preamble(model_name):

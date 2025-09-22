@@ -1,6 +1,5 @@
 from conversation.abstract_conversation import Role
 from conversation.base_conversation_factory import BaseConversationFactory
-from conversation.gpt_factory import GPTFactory
 from rl.agents.semantic_units import BaseSemanticSubunit
 
 
@@ -30,21 +29,3 @@ class GoalIdentifier(BaseSemanticSubunit):
         :return: Goal as a string.
         """
         return self.process_information(information)["target"]
-
-
-def main():
-    from prompts import fs1_prompt
-
-    identifier = GoalIdentifier(GPTFactory())
-    prompt = fs1_prompt(5, "a hamburger", 200)[:100]
-
-    information = {
-        "prompt": prompt,
-    }
-
-    information = identifier.process_information(information)
-    print(information["target"])
-
-
-if __name__ == "__main__":
-    main()
