@@ -1,28 +1,83 @@
-# `drone.py` parameters
+---
+hide:
+  - toc
+---
+# `flyserach.py` parameters
 
-## Scenario-related parameters 
+## Base options
 
-* `scenario_type` -- either `forest_random`, `city_random`, `forest_random_anomaly`, `city_random_anomaly` or `mimic`. The first four mean that scenarios will be randomly generated, while the last means that scenario configurations will be copied (mimicked) from a known, existing run. Typically, you would use `mimic` and specify `mimic_run_path` to point to one of template directories in `run_templates` directory.
-* `mimic_run_path` -- use only if `scenario_type` is set to `mimic`. This is the path to the directory where the run to be mimicked is stored.
-* `mimic_run_cls_names` -- for normal use should set it to `*`. You only need to change it if for some reason you would like to perform a mimic run, but only for a certain class of objects (for example, fire). The argument is a list of semicolon (`;`) separated class names of objects that a scenario should contain in order to be mimicked (e.g. `fire` or `fire;car`. The name needs to be a _substring_ of the class name, so `car` would match all `car`-related classes (like sports cars, police cars and so on)). 
-* `line_of_sight_assured` -- whether the agent should be able to see the searched object at the start of the trajectory. Should be set to `true` while generating FS-1-like and FS-A-1-like scenarios, and `false` for FS-2-like scenarios.
+```
+ Usage: flysearch.py [OPTIONS] COMMAND [ARGS]...                                                                         
+                                                                                                                         
+ FlySearch benchmark                                                                                                     
+                                                                                                                         
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --model-backend            [vllm|openai|anthropic|gemini]              The backend of the model to use [required]  │
+│ *  --model-name               TEXT                                        The name of the model to use (passed to the │
+│                                                                           model backend)                              │
+│                                                                           [required]                                  │
+│    --run-name                 TEXT                                        The name of the benchmark run (default to   │
+│                                                                           date and time)                              │
+│    --results-directory        PATH                                        The directory to store the experiment       │
+│                                                                           results                                     │
+│                                                                           [default: all_logs]                         │
+│    --agent                    [simple_llm|description_llm|generalist_one  The type of agent to use (use default for   │
+│                               |detection_driven_description_llm|detectio  oryginal FlySearch)                         │
+│                               n_cheater_factory|parsing_error]            [default: simple_llm]                       │
+│    --skip-sanity-check                                                    Whether to skip running a sanity check      │
+│                                                                           before the benchmark (not recommended)      │
+│    --number-of-runs           INTEGER                                     The number of runs to perform               │
+│                                                                           [default: 300]                              │
+│    --continue-from-idx        INTEGER                                     The index of the scenario to continue       │
+│                                                                           running from (e.g. if execution was         │
+│                                                                           interrupted)                                │
+│                                                                           [default: 0]                                │
+│    --log-level                [CRITICAL|ERROR|WARNING|INFO|DEBUG]         The level of logging to use [default: INFO] │
+│    --help                                                                 Show this message and exit.                 │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ benchmark          Run a predefined benchmark set.                                                                    │
+│ random-scenarios   Run FlySearch with random scenario generation.                                                     │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 
-## Method-related parameters 
+```
 
-* `model` -- the model to be used. See  `models` subsection for more details.
-* `agent` -- for normal use (i.e. evaluating VLMs) should be set to `simple_llm`. Refer to `tutorials/agents.md` for more details.
-* `prompt_type` -- either `fs1` or `fs2`. FS-Anomaly-1 should use the same prompt type as FS-1.
+## benchmark command
 
-## Logging-related parameters 
+Runs the predefined benchmark set, e.g. FS-1 or FS-2. Default scenario sets are located in the `run_templates`
+directory. You can also create your own scenario sets from logs of any experiment, just copy the `scenario_params.json`
+files and directory structure.
 
-* `log_directory` -- name of the directory (relative to this script) where you wish to keep logs from runs. We recommend to keep it called `all_logs`.
-* `run_name` -- all trajectories will be saved in `log_directory/run_name`. 
+```                                                                                                                    
+ Usage: flysearch.py benchmark [OPTIONS] SCENARIO_DIRECTORY                                                              
+                                                                                                                         
+ Run a predefined benchmark set.                                                                                         
+                                                                                                                         
+╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    scenario_directory      PATH  The directory containing the scenarios to run the benchmark on [required]          │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                                           │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
 
-## Benchmark-related parameters
+## random-scenarios command
 
-* `dummy_first` -- for normal use, should be set to `true`. Controls whether we discard first trajectory for the simulation environment to "warm up" (in case it misses assets and so on). Note that mimic runs assume this behaviour and duplicate the first trajectory config to compensate for that.
-* `forgiveness` -- for normal use, should be set to `5`. This is amount of consecutive validation errors of model's actions. Exceeding that number will result in trajectory termination. 
-* `glimpses` -- number of glimpses (or images) the agent is allowed to see in the trajectory. In our experiments, we used 10 glimpses for FS-1 and FS-Anomaly-1 and 20 glimpses for FS-2. Note that image of the class being searched in FS-2 is not counted towards this limit (even though that image is a first image logged in the trajectory).
-* `number_of_runs` -- number of trajectories you wish to have generated (or replicated from the mimic run).
-* `show_class_image` -- whether the agent should receive additional, visual prompt containing image of the object being searched. Should be set to `true` while generating FS-2-like scenarios, and `false` for FS-1-like and FS-A-1-like scenarios.
-* `continue_from` -- useful if your run was interrupted for some reason, and you want to continue it. For example, if your run was interrupted during 42nd trajectory, you would need to delete its folder from logs (as it is unfinished and needs to be redone) and set `continue_from` to `42`. 
+Runs FlySearch with random scenario generation. You can specify the number of scenario profile and difficulty levels to use.
+You can create new difficulty levels in `rl/evaluation/configs/difficulty_levels.py`.
+
+```
+ Usage: flysearch.py random-scenarios [OPTIONS] SCENARIO_TYPE:{city|forest|city_anomaly|forest_anomaly}
+                                      DIFFICULTY:{fs1|fs2}                                                               
+                                                                                                                         
+ Run FlySearch with random scenario generation.                                                                          
+                                                                                                                         
+╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    scenario_type      SCENARIO_TYPE:{city|forest|city_anomaly|fores  The type of scenario to generate [required]    │
+│                         t_anomaly}                                                                                    │
+│ *    difficulty         DIFFICULTY:{fs1|fs2}                           The difficulty of the scenario [required]      │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                                           │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```

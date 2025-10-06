@@ -1,44 +1,47 @@
 # Running the benchmark
 
-## API keys
-
-To use closed-source VLMs, you need to have an API key. To configure them, set appropriate variables in the
-`.env` file. See the Setup guide for more details.
+## Setup
+If you haven't done so already, please follow the instructions in the [Setup](../getting-started/10-setup.md) section.
 
 ## Running FlySearch
 
+You can run FlySearch using 
+```
+uv run flysearch.py --model-backend <name of model backend> --model-name <model name string> benchmark <scenario template set>
+```
+Scenario sets are located in the run_templates directory
 
-### Direct `drone.py` script usage
-
-`drone.py` script is the entrypoint to run the benchmark. It has several configurable parameters. We explain them in the `tutorials/00-script.md` file.
+See `uv run flyserach.py --help` for a list of all options.
 
 ### Models 
 
-FlySearch supports testing several models. To test them, you can use on of our examples (discussed in the `Examples` section) and change the `model` parameter appropriately:
-* OpenAI models. To use it, prefix your model argument with `oai-` and then use OpenAI's model name (e.g. `oai-gpt-4o`).
-* Gemini family models (e.g. gemini-2.0-flash. To use it, set `model` flag to `gemini-2.0-flash`). Note that we use Gemini models using compatibility mode with OpenAI format -- as of now, this unfortunately tends to fail with Gemini 2.5 Pro. Pull requests fixing that issue are welcome.
-* Anthropic models. To use it, prefix the model name with `anthropic-`, e.g. `anthropic-claude-3-5-sonnet-20241022`.
-* Any models behind a VLLM API. If model name does not match any of the above, it is assumed to be a VLLM model. OpenAI protocol is used to communicate with the model. For example, to use Gemma3-27b hosted on [DeepInfra](https://deepinfra.com/), you need to configure `.env` file with `VLLM_ADDRESS = 'https://api.deepinfra.com/v1/openai'`, `VLLM_KEY` matching your DeepInfra API key, and set `model` to `google/gemma-3-27b-it`.
-
-### Direct use of our environment (without code for benchmarking)
-
-Our environment is based on Unreal Engine 5, and we provide a Gymnasium-like interface to it. It can be used directly without the rest of the code in this repository. See `tutorials/01-environment.md` for examples. 
+FlySearch supports testing several model backends. Set the `--model-backend` and `--model-name` parameters appropriately:
+* OpenAI models - `--model backend=openai`.
+* Gemini family models (e.g. gemini-2.0-flash) - `--model-backend gemini`. Note that we use Gemini models using compatibility mode with OpenAI format -- as of now, this unfortunately tends to fail with Gemini 2.5 Pro. Pull requests fixing that issue are welcome.
+* Anthropic models - `--model-backend antropic`.
+* Any models behind a OpenAI/VLLM API - `--model-backend vllm`. OpenAI protocol is used to communicate with the model. For example, to use Gemma3-27b hosted on [DeepInfra](https://deepinfra.com/), you need to configure `.env` file with `VLLM_ADDRESS = 'https://api.deepinfra.com/v1/openai'`, `VLLM_KEY` matching your DeepInfra API key, and set `--model-name` to `google/gemma-3-27b-it`.
 
 ## Result analysis
 
-To read how to analyse logs from FlySearch, please see the `tutorials/02-result-analysis.md` file.
+FlySearch prints out basic statistics to the console, but more detailed logs are stored in JSON format in the `logs` directory.
+To read how to analyse logs from FlySearch, please see the [result-analysis](../user-guide/20-result-analysis.md).
 
-## Contributing support for unsupported models
+## Adding support for new models
 
-See `tutorials/03-conversation.md`.
-
-## Supporting new classes and assets 
-
-See `tutorials/04-custom-assets.md`.
+Out of the box, FlySearch supports any OpenAI API compliant model. If you need to use other API standards, you can implement a new conversation class - see [conversation](../user-guide/10-conversation.md).
 
 ## Custom agents
 
-See `tutorials/05-custom-agents.md`.
+If you want to implement a new agent behaviour (for example, one that uses multiple models), you can do so by implementing a new agent class.
+See [custom-agents](../user-guide/30-custom-agents.md).
+
+## Supporting new classes, assets and environments
+
+See [internals](../internals/30-custom-environments.md) documentation.
+
+## Direct use of our environment (without code for benchmarking)
+
+Our environment is based on Unreal Engine 5, and we provide a Gymnasium-like interface to it. It can be used directly without the rest of the code in this repository. See [environment](../internals/10-environment.md) for examples.
 
 ## Notes
 

@@ -256,5 +256,5 @@ For questions, please open an issue on GitHub or contact Adam Pardyl -- adam.par
 </div>
 
 <div style="text-align: center; margin: 2em 0" markdown>
-[:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button } [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button } [:material-rocket: Get started](getting-started/10-setup/){ .md-button .md-button--primary }
+[:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button } [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button } [:material-rocket: Get started](getting-started/10-setup.md){ .md-button .md-button--primary }
 </div>
