@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 from pathlib import Path
+from PIL import Image
 
 # Headless rendering for matplotlib
 import matplotlib
@@ -20,14 +21,14 @@ from analysis.run import Run
 from analysis.run_visualiser import RunVisualiser
 
 
-def generate_preview_png(episode_dir: Path, out_file: Path) -> None:
+def generate_preview(episode_dir: Path, out_file: Path) -> None:
     run = Run(episode_dir)
     visualiser = RunVisualiser(run)
     fig = plt.figure(figsize=(8, 6), dpi=150)
     ax = fig.add_subplot(projection='3d')
     visualiser.plot(ax)
     out_file.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_file, format='png', bbox_inches='tight')
+    fig.savefig(out_file, format='jpg', bbox_inches='tight')
     plt.close(fig)
 
 
@@ -37,6 +38,32 @@ def copy_file_if_exists(src: Path, dst: Path) -> bool:
         shutil.copy2(src, dst)
         return True
     return False
+
+
+def convert_png_to_jpg(src: Path, dst: Path) -> bool:
+    """Convert a PNG image to JPEG while copying.
+
+    If the PNG has an alpha channel, composite onto a white background.
+    Returns True on success, False otherwise.
+    """
+    if not src.exists() or not src.is_file():
+        return False
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with Image.open(src) as img:
+            # Handle transparency by compositing onto white background
+            if img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info):
+                rgba = img.convert("RGBA")
+                background = Image.new("RGB", rgba.size, (255, 255, 255))
+                background.paste(rgba, mask=rgba.split()[-1])
+                img_to_save = background
+            else:
+                img_to_save = img.convert("RGB")
+            img_to_save.save(dst, format="JPEG", quality=90, optimize=True)
+        return True
+    except Exception as e:
+        print(f"[WARN] Failed to convert {src} to JPEG: {e}")
+        return False
 
 
 def export_episode(run_dir: Path, episode_name: str, out_dir: Path) -> None:
@@ -51,14 +78,16 @@ def export_episode(run_dir: Path, episode_name: str, out_dir: Path) -> None:
     if not copy_file_if_exists(episode_dir / 'conversation.json', target_dir / 'conversation.json'):
         copy_file_if_exists(episode_dir / 'simple_conversation.json', target_dir / 'conversation.json')
 
-    # Copy all PNGs (images like 0.png, 1.png, ...)
+    # Convert and copy all PNGs as JPGs (images like 0.png -> 0.jpg)
     for item in os.listdir(episode_dir):
         if item.lower().endswith('.png'):
-            copy_file_if_exists(episode_dir / item, target_dir / item)
+            src_png = episode_dir / item
+            dst_jpg = target_dir / f"{Path(item).stem}.jpg"
+            convert_png_to_jpg(src_png, dst_jpg)
 
-    # Generate preview.png
+    # Generate preview.jpg
     try:
-        generate_preview_png(episode_dir, target_dir / 'preview.png')
+        generate_preview(episode_dir, target_dir / 'preview.jpg')
     except Exception as e:
         print(f"[WARN] Failed to generate preview for {episode_dir}: {e}")
 

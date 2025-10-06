@@ -62,3 +62,4 @@ nav:
       - Custom environments: internals/30-custom-environments.md
       - Custom assets: internals/40-custom-assets.md
       - Building Unreal: internals/50-building-unreal.md
+  - Examples: logs/
