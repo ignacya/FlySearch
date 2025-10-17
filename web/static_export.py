@@ -18,6 +18,7 @@ import sys
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 from analysis.run import Run
+from analysis.run_analyser import RunAnalyser
 from analysis.run_visualiser import RunVisualiser
 
 
@@ -66,7 +67,7 @@ def convert_png_to_jpg(src: Path, dst: Path) -> bool:
         return False
 
 
-def export_episode(run_dir: Path, episode_name: str, out_dir: Path) -> None:
+def export_episode(run_dir: Path, episode_name: str, out_dir: Path, threshold: float) -> None:
     episode_dir = run_dir / episode_name
     target_dir = out_dir / run_dir.name / episode_name
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -91,6 +92,18 @@ def export_episode(run_dir: Path, episode_name: str, out_dir: Path) -> None:
     except Exception as e:
         print(f"[WARN] Failed to generate preview for {episode_dir}: {e}")
 
+    # Compute and export success flag
+    try:
+        analyser = RunAnalyser(Run(episode_dir))
+        success = analyser.success_criterion_satisfied(threshold=threshold, check_claimed=True)
+
+        # Write a minimal JSON boolean to match the runtime API shape
+        with open(target_dir / 'success.json', 'w') as f_json:
+            json.dump(success, f_json)
+
+    except Exception as e:
+        print(f"[WARN] Failed to compute/export success for {episode_dir}: {e}")
+
 
 def build_index(log_dir: Path) -> dict:
     index = {"runs": []}
@@ -107,6 +120,7 @@ def main():
     parser.add_argument('--out-dir', type=str, default=str(PROJECT_ROOT / 'web' / 'client' / 'public' / 'data'),
                         help='Output directory for exported static data (served under /data)')
     parser.add_argument('--clean', action='store_true', help='Remove existing out-dir before export')
+    parser.add_argument('--threshold', type=float, default=10.0, help='Altitude threshold for success criterion')
     args = parser.parse_args()
 
     log_dir = Path(args.log_dir).resolve()
@@ -124,7 +138,7 @@ def main():
     for run in index["runs"]:
         run_dir = log_dir / run["name"]
         for episode in run["episodes"]:
-            export_episode(run_dir, episode, out_dir)
+            export_episode(run_dir, episode, out_dir, threshold=args.threshold)
 
     # Write index.json
     with open(out_dir / 'index.json', 'w') as f:

@@ -345,10 +345,14 @@ function fetchSuccess(run, episode) {
   successState.value = null
   if (!run || !episode) return
   if (isStatic) {
-    // In static mode, show success if preview exists and a file named success.txt with "true" exists (optional future extension).
-  const url = base + `/${encodeURIComponent(run)}/${encodeURIComponent(episode)}/preview.jpg`
-    fetch(url, { method: 'HEAD' })
-      .then((res) => { successState.value = res.ok ? true : null })
+    // In static mode, read exported success.json (boolean). If missing, leave as null.
+    const urlJson = base + `/${encodeURIComponent(run)}/${encodeURIComponent(episode)}/success.json`
+    fetch(urlJson)
+      .then((res) => {
+        if (!res.ok) throw new Error('missing success.json')
+        return res.json()
+      })
+      .then((data) => { successState.value = !!data })
       .catch(() => { successState.value = null })
     return
   }
