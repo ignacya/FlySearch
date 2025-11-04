@@ -89,8 +89,7 @@ class UnrealGlimpseGenerator:
 
     def wait_for_unreal_to_finish(self):
         while "false" in self.client.request("vget /camera/1/partition_loaded").lower():
-            print("Unreal Glimpse Generator: Waiting for Unreal to finish loading the PARTITION, current status:",
-                  self.client.request("vget /camera/1/partition_loaded"))
+            print("Unreal Glimpse Generator: Waiting for Unreal to finish loading the PARTITION...")
             sleep(0.5)
 
     def is_unreal_ready(self):
