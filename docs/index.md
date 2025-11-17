@@ -11,7 +11,7 @@ hide:
 
 Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliński, Maciej Wołczyk
 
-[:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button .md-button--primary }  [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button }
+[:material-trophy: Leaderboard](/#leaderboard){ .md-button .md-button--primary } [:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button }  [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button }
 </div>
 
 
@@ -20,7 +20,7 @@ Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliń
     A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments. Easy for humans, hard for state-of-the-art VLMs / MLLMs.
 
 ## Preview
-Objective: locate fire in a city. Model: GPT-4o.
+Objective: locate a fire, environment: city, model: GPT-4o.
 
 <video width="1920" height="1080" controls autoplay muted loop>
   <source src="imgs/preview.mp4" type="video/mp4">
@@ -48,9 +48,18 @@ Objective: locate fire in a city. Model: GPT-4o.
   "fs-2-city": "City (%)"
 } %}
 
-<div markdown style="overflow-x: scroll;">
+<div markdown style="overflow-x: auto;">
 {{ render_leaderboard(df, groups, pretty) }}
 </div>
+
+The % Progress metric refers to the average completion percentage of FlySearch evaluation sets
+(FS-1, FS-Anomaly, FS-2) by the model.
+
+!!! tip "Join the challenge"
+    If you would like to submit your agent to the leaderboard, please check the submission page.
+    We accept submissions of both standard VLMs/MLLMs and agentic frameworks.
+    
+    [:material-invoice-text-send: Submit your agent](/getting-started/30-submit/){ .md-button .md-button--primary }
 
 ## Motivation: Vision-Language Models for Embodied AI exploration
 
@@ -132,8 +141,8 @@ scenario generator.
 
 ## More examples
 
-Examples of a successful trajectories in FS-1 performed by GPT-4o. See more examples with complete agent - benchmark
-conversation [here](/logs/).
+Examples of a successful trajectories in FS-1 performed by GPT-4o. See more examples with complete agent-benchmark
+conversations [here](/logs/).
 
 <div style="text-align: center">
 <video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
@@ -159,14 +168,14 @@ conversation [here](/logs/).
 
 
 ## Trajectory step by step
+Example of a successful trajectory in FS-1 performed by GPT-4o. The agent navigates to red sports car
+object by first descending and then moving to the right. The first row shows the model’s visual inputs,
+and the second actions it has taken. Note the presence of the grid overlay on images.
 
 <div style="text-align: center" markdown>
 ![Example trajectory](imgs/trajectory.png){width="75%"}
 </div>
 
-Example of a successful trajectory in FS-1 performed by GPT-4o. The agent navigates to red sports car
-object by first descending and then moving to the right. The first row shows the model’s visual inputs,
-and the second actions it has taken. Note the presence of the grid overlay on images.
 
 
 ## Acknowledgements

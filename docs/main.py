@@ -88,7 +88,7 @@ def define_env(env):
         html.append('  <thead>')
         html.append('    <tr>')
         html.append('      <th>Agent</th>')
-        html.append('      <th>Average</th>')
+        html.append('      <th>Progress</th>')
         
         # Group headers
         for group_label, metrics in groups:

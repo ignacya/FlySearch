@@ -61,6 +61,7 @@ nav:
   - Getting started:
       - Setup: getting-started/10-setup.md
       - Running the benchmark: getting-started/20-running.md
+      - Submit: getting-started/30-submit.md
   - User guide:
       - FlySearch.py: user-guide/00-script.md
       - Conversation: user-guide/10-conversation.md
