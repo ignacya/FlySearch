@@ -49,11 +49,15 @@ def define_env(env):
                     val = r.get(metric)
                     if val is not None and val == val:  # Check for not None and not NaN
                         group_values.append(val)
+                    else:
+                        group_values.append(0.0) # missing results as zeros.
                 
                 # If group has any valid values, compute its average
                 if len(group_values) > 0:
                     group_avg = sum(group_values) / len(group_values)
                     group_averages.append(group_avg)
+                else:
+                    group_averages.append(0.0) # missing results as zeros.
             
             # Compute overall as average of group averages
             if len(group_averages) > 0:
