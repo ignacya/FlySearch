@@ -140,8 +140,8 @@ def dot_matrix_two_dimensional_unreal(img: np.ndarray, w_dots, h_dots, pixel_per
         x_diff = x - w_center
         y_diff = h_center - y
 
-        x_diff_px = x_diff * pixels_per_cell_h
-        y_diff_px = y_diff * pixels_per_cell_w
+        x_diff_px = x_diff * pixels_per_cell_w
+        y_diff_px = y_diff * pixels_per_cell_h
 
         x_diff_unit = x_diff_px * pixel_per_unit
         y_diff_unit = y_diff_px * pixel_per_unit
@@ -149,8 +149,8 @@ def dot_matrix_two_dimensional_unreal(img: np.ndarray, w_dots, h_dots, pixel_per
         x_diff_unit = int(round(x_diff_unit))
         y_diff_unit = int(round(y_diff_unit))
 
-        x_px = x * pixels_per_cell_h
-        y_px = y * pixels_per_cell_w
+        x_px = x * pixels_per_cell_w
+        y_px = y * pixels_per_cell_h
 
         pixel_color = img.getpixel((x_px, y_px))
         opposite_color = get_opposite_color(pixel_color)
