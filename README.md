@@ -82,13 +82,12 @@ FlySearch uses Unreal® Engine. Unreal® is a trademark or registered trademark 
 If you use FlySearch in your research, please cite the following paper:
 
 ```
-@misc{pardyl2025flysearch,
-  title={FlySearch: Exploring how vision-language models explore},
-  author={Adam Pardyl and Dominik Matuszek and Mateusz Przebieracz and Marek Cygan and Bartosz Zieliński and Maciej Wołczyk},
-  year={2025},
-  eprint={2506.02896},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2506.02896}, 
+@inproceedings{pardyl2025flysearch,
+  title        = {{FlySearch: Exploring how vision-language models explore}},
+  author       = {Pardyl, Adam and Matuszek, Dominik and Przebieracz, Mateusz and Cygan, Marek and Zieliński, Bartosz and Wołczyk, Maciej},
+  year         = 2025,
+  booktitle    = {{Advances in Neural Information Processing Systems (NeurIPS)}},
+  volume       = 39
 }
+
 ```

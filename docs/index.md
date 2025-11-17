@@ -22,7 +22,7 @@ Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliń
 ## Preview
 Objective: locate fire in a city. Model: GPT-4o.
 
-<video width="1920" height="1080" controls autoplay muted>
+<video width="1920" height="1080" controls autoplay muted loop>
   <source src="imgs/preview.mp4" type="video/mp4">
 </video>
 <small>Video appears to be sped up due to slow frame capture rate.</small>
@@ -48,7 +48,9 @@ Objective: locate fire in a city. Model: GPT-4o.
   "fs-2-city": "City (%)"
 } %}
 
+<div markdown style="overflow-x: scroll;">
 {{ render_leaderboard(df, groups, pretty) }}
+</div>
 
 ## Motivation: Vision-Language Models for Embodied AI exploration
 
@@ -128,7 +130,35 @@ scenario generator.
 * **Success condition:** The agent has the target's center in its view, is at most 10 meters above it, and responds with
   _FOUND_.
 
-## Example trajectory
+## More examples
+
+Examples of a successful trajectories in FS-1 performed by GPT-4o. See more examples with complete agent - benchmark
+conversation [here](/logs/).
+
+<div style="text-align: center">
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/6_hd.small.mp4" type="video/mp4">
+</video>
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/51_hd.small.mp4" type="video/mp4">
+</video>
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/100_hd.small.mp4" type="video/mp4">
+</video>
+
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/27_hd.small.mp4" type="video/mp4">
+</video>
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/108_hd.small.mp4" type="video/mp4">
+</video>
+<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+  <source src="imgs/samples/147_hd.small.mp4" type="video/mp4">
+</video>
+</div>
+
+
+## Trajectory step by step
 
 <div style="text-align: center" markdown>
 ![Example trajectory](imgs/trajectory.png){width="75%"}
@@ -137,6 +167,7 @@ scenario generator.
 Example of a successful trajectory in FS-1 performed by GPT-4o. The agent navigates to red sports car
 object by first descending and then moving to the right. The first row shows the model’s visual inputs,
 and the second actions it has taken. Note the presence of the grid overlay on images.
+
 
 ## Acknowledgements
 
@@ -148,17 +179,17 @@ Strategic Programme Excellence Initiative at Jagiellonian University. We gratefu
 
 ## Citation
 
+{% raw %}
 ```
-@misc{pardyl2025flysearch,
-  title={FlySearch: Exploring how vision-language models explore},
-  author={Adam Pardyl and Dominik Matuszek and Mateusz Przebieracz and Marek Cygan and Bartosz Zieliński and Maciej Wołczyk},
-  year={2025},
-  eprint={2506.02896},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2506.02896}, 
+@inproceedings{pardyl2025flysearch,
+  title        = {{FlySearch: Exploring how vision-language models explore}},
+  author       = {Pardyl, Adam and Matuszek, Dominik and Przebieracz, Mateusz and Cygan, Marek and Zieliński, Bartosz and Wołczyk, Maciej},
+  year         = 2025,
+  booktitle    = {{Advances in Neural Information Processing Systems (NeurIPS)}},
+  volume       = 39
 }
 ```
+{% endraw %}
 
 ## Contact
 

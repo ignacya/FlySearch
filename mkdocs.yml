@@ -11,6 +11,7 @@ theme:
     primary: blue grey
   icon:
     logo: material/quadcopter
+  favicon: imgs/favicon.png
   features:
     - navigation.instant
     - navigation.instant.progress
