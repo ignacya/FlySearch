@@ -128,5 +128,31 @@
     "fs-anomaly-1-city-std": 2.0,
     "fs-2-city": 3.0,
     "fs-2-city-std": 0.8
+  },
+  {
+    "model": "Gemini 2.5 flash",
+    "fs-1-forest": 47.4,
+    "fs-1-forest-std": 8.1,
+    "fs-1-city": 31.5,
+    "fs-1-city-std": 7.4,
+    "fs-anomaly-1-forest": 55.0,
+    "fs-anomaly-1-forest-std": 5.0,
+    "fs-anomaly-1-city": 21.0,
+    "fs-anomaly-1-city-std": 4.1,
+    "fs-2-city": 4.9,
+    "fs-2-city-std": 2.9
+  },
+  {
+    "model": "Claude 4.5 Sonnet",
+    "fs-1-forest": 55.1,
+    "fs-1-forest-std": 7.4,
+    "fs-1-city": 24.3,
+    "fs-1-city-std": 6.558,
+    "fs-anomaly-1-forest": 54.0,
+    "fs-anomaly-1-forest-std": 5.0,
+    "fs-anomaly-1-city": 17.0,
+    "fs-anomaly-1-city-std": 37.6,
+    "fs-2-city": 1.6,
+    "fs-2-city-std": 1.6
   }
 ]

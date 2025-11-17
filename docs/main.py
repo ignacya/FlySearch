@@ -70,6 +70,11 @@ def define_env(env):
             if overall_max is None or score > overall_max:
                 overall_max = score
         
+        # Sort records by overall score (descending)
+        sorted_records = sorted(records, 
+                               key=lambda r: overall_scores.get(r.get("model"), -float('inf')), 
+                               reverse=True)
+        
         # Generate HTML table
         html = []
         html.append('<div style="text-align: center" markdown="1">')
@@ -106,7 +111,7 @@ def define_env(env):
         
         # Human baseline row
         html.append('    <tr data-sort-method="none">')
-        html.append('    <td>:material-human: Human (untrained)</td>')
+        html.append('    <td>🧍 Human (untrained)</td>')
         html.append('    <td>—</td>')
         html.append('    <td>—</td>')
         html.append('    <td>66.7&nbsp;±&nbsp;4.5</td>')
@@ -116,10 +121,17 @@ def define_env(env):
         html.append('    </tr>')
         
         # Model rows
-        for r in records:
+        medal_icons = {
+            0: '🥇 ',  # Gold medal for 1st place
+            1: '🥈 ',  # Silver medal for 2nd place
+            2: '🥉 '   # Bronze medal for 3rd place
+        }
+        
+        for idx, r in enumerate(sorted_records):
             html.append('    <tr>')
             model = r.get("model")
-            html.append(f'      <td>:material-robot: {model if model else "—"}</td>')
+            medal = medal_icons.get(idx, '')
+            html.append(f'      <td>{medal}🤖 {model if model else "—"}</td>')
             
             # Overall column - computed dynamically
             overall_value = overall_scores.get(model)

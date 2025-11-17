@@ -19,6 +19,14 @@ Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliń
 !!! abstract "Tl;dr"
     A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments. Easy for humans, hard for state-of-the-art VLMs / MLLMs.
 
+## Preview
+Objective: locate fire in a city. Model: GPT-4o.
+
+<video width="1920" height="1080" controls autoplay muted>
+  <source src="imgs/preview.mp4" type="video/mp4">
+</video>
+<small>Video appears to be sped up due to slow frame capture rate.</small>
+
 ## Leaderboard
 
 
