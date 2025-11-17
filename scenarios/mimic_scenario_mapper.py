@@ -142,11 +142,9 @@ def parse_scenario(scenario):
 
 class MimicScenarioMapper(EpisodeCollectionMapper):
     def __init__(
-            self, path: pathlib.Path, filter_str: str = "*", continue_from: int = 0
-    ):
+            self, path: pathlib.Path, filter_str: str = "*"):
         self.path = path
         self.white_list = filter_str.strip().split(";")
-        self.continue_from = continue_from
         self.scenarios = list(self.iterate_scenarios())
 
         object_type_cls = self.scenarios[0]["object_type"]
@@ -176,7 +174,7 @@ class MimicScenarioMapper(EpisodeCollectionMapper):
         except (IndexError, ValueError):
             entries = sorted(entries, key=lambda x: int(x))
 
-        for entry in entries[self.continue_from:]:
+        for entry in entries:
             entry_path = self.path / entry
             if not os.path.isdir(entry_path):
                 continue

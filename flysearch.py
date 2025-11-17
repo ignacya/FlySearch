@@ -110,9 +110,7 @@ def benchmark(
     """
     Run a predefined benchmark set.
     """
-    scenario_mapper = MimicScenarioMapper(
-        scenario_directory, continue_from=context["continue_from_idx"]
-    )
+    scenario_mapper = MimicScenarioMapper(scenario_directory)
     env_type = (
         EnvironmentType.CITY if scenario_mapper.is_city else EnvironmentType.FOREST
     )
