@@ -234,6 +234,20 @@ class TrajectoryEvaluator:
 
                 try:
                     action = self.agent.correct_previous_action(fail_reason=fail_info)
+                except ParsingError:
+                    # If agent gives some nonsense, still log initial position
+                    evaluation_state = EvaluationState(
+                        observation=observation,
+                        action={"ERROR": "invalid"},
+                        info=info,
+                        observation_number=glimpse_number,
+                        correction_number=fails,
+                        agent_info=self.agent.get_agent_info(),
+                        scenario=self.scenario,
+                    )
+                    self.tell_loggers(loggers, evaluation_state)
+                    self.tell_loggers_about_termination(loggers, {"reason": "parsing error"})
+                    return
                 except:
                     self.tell_loggers_about_termination(loggers, {"reason": "environment error"})
                     raise
