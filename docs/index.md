@@ -5,6 +5,12 @@ hide:
   - navigation
 ---
 
+<style>
+.md-button {
+    margin-bottom: .2rem;
+}
+</style>
+
 <div style="text-align: center; margin-bottom: 3em;" markdown>
 ![Logo](imgs/logo.jpg){width="50%"}
 <h1 style="margin-bottom: 0.1em !important;">FlySearch: Exploring how vision-language models explore</h1>
@@ -145,23 +151,23 @@ Examples of a successful trajectories in FS-1 performed by GPT-4o. See more exam
 conversations [here](/logs/).
 
 <div style="text-align: center">
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/6_hd.small.mp4" type="video/mp4">
 </video>
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/51_hd.small.mp4" type="video/mp4">
 </video>
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/100_hd.small.mp4" type="video/mp4">
 </video>
 
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/27_hd.small.mp4" type="video/mp4">
 </video>
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/108_hd.small.mp4" type="video/mp4">
 </video>
-<video autoplay muted style="object-fit: cover; width:400px; height:400px" loop>
+<video controls autoplay muted loop style="object-fit: cover; width:400px; height:400px">
   <source src="imgs/samples/147_hd.small.mp4" type="video/mp4">
 </video>
 </div>
