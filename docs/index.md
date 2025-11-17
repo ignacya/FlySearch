@@ -21,117 +21,26 @@ Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliń
 
 ## Leaderboard
 
-<!--- do not ident - will break markdown hacks --->
-<div style="text-align: center" markdown="1">
-<div class="md-typeset__table" markdown="1">
-<style>
-th[colspan="2"] {
-    text-align: center !important;
-}
-</style>
-<table markdown="1">
-<thead>
-<tr>
-<th>Model</th>
-<th colspan="2">FS-1</th>
-<th>FS-Anomaly-1</th>
-<th>FS-2</th>
-</tr>
-<tr>
-<th></th>
-<th>Forest (%)</th>
-<th>City (%)</th>
-<th>Overall (%)</th>
-<th>City (%)</th>
-</tr>
-</thead>
-<tbody markdown="1">
-<tr markdown="1">
-<td markdown="1">:material-human: <i>Human (untrained)</i></td>
-<td>--</td>
-<td>66.7 &plusmn; 4.5</td>
-<td>--</td>
-<td>60.8 &plusmn; 6.9</td>
-</tr>
 
-<tr markdown="1">
-<td markdown="1">:material-robot: Gemini 2.0 flash</td>
-<td>42.5 &plusmn; 3.5</td>
-<td><strong>41.5 &plusmn; 3.5</strong></td>
-<td><strong>35.5 &plusmn; 3.4</strong></td>
-<td>6.0 &plusmn; 1.1</td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: Claude 3.5 Sonnet</td>
-<td><strong>52.0 &plusmn; 3.5</strong></td>
-<td>30.5 &plusmn; 3.3</td>
-<td>27.5 &plusmn; 3.2</td>
-<td><strong>6.5 &plusmn; 1.2</strong></td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: GPT-4o</td>
-<td>45.5 &plusmn; 3.5</td>
-<td>33.5 &plusmn; 3.3</td>
-<td>27.0 &plusmn; 3.1</td>
-<td>3.5 &plusmn; 0.9</td>
-</tr>
+{% set df = pd_read_json('leaderboard.json') %}
 
-<tr markdown="1">
-<td markdown="1">:material-robot: Pixtral-Large</td>
-<td>38.0 &plusmn; 3.4</td>
-<td>21.5 &plusmn; 2.9</td>
-<td>15.0 &plusmn; 2.5</td>
-<td>3.0 &plusmn; 0.8</td>
-</tr>
+{# Define groups: (Group label, [metric_keys...]) #}
+{% set groups = [
+  ("FS-1", ["fs-1-forest", "fs-1-city"]),
+  ("FS-Anomaly-1", ["fs-anomaly-1-forest", "fs-anomaly-1-city"]),
+  ("FS-2", ["fs-2-city"])
+] %}
 
+{# Define pretty names for metrics #}
+{% set pretty = {
+  "fs-1-forest": "Forest (%)",
+  "fs-1-city":   "City (%)",
+  "fs-anomaly-1-forest": "Forest (%)",
+  "fs-anomaly-1-city":   "City (%)",
+  "fs-2-city": "City (%)"
+} %}
 
-<tr markdown="1">
-<td markdown="1">:material-robot: Qwen2-VL 72B</td>
-<td>16.5 &plusmn; 2.6</td>
-<td>18.0 &plusmn; 2.7</td>
-<td>7.5 &plusmn; 1.9</td>
-<td>--</td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: Llava-Onevision 72b</td>
-<td>12.5 &plusmn; 2.3</td>
-<td>6.5 &plusmn; 1.7</td>
-<td>8.5 &plusmn; 2.0</td>
-<td>--</td>
-</tr>
-
-<tr markdown="1">
-<td markdown="1">:material-robot: Qwen2.5-VL 7B</td>
-<td>6.0 &plusmn; 1.7</td>
-<td>1.5 &plusmn; 0.9</td>
-<td>2.8 &plusmn; 1.2</td>
-<td>0.0 &plusmn; 0.0</td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: InternVL-2.5 8B MPO</td>
-<td>2.5 &plusmn; 1.1</td>
-<td>1.5 &plusmn; 0.9</td>
-<td>3.5 &plusmn; 1.3</td>
-<td>--</td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: Llava-Interleave-7b</td>
-<td>0.0 &plusmn; 0.0</td>
-<td>1.5 &plusmn; 0.9</td>
-<td>0.0 &plusmn; 0.0</td>
-<td>--</td>
-</tr>
-<tr markdown="1">
-<td markdown="1">:material-robot: Phi 3.5 vision</td>
-<td>0.0 &plusmn; 0.0</td>
-<td>0.0 &plusmn; 0.0</td>
-<td>0.0 &plusmn; 0.0</td>
-<td>--</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+{{ render_leaderboard(df, groups, pretty) }}
 
 ## Motivation: Vision-Language Models for Embodied AI exploration
 

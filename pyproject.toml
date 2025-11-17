@@ -33,5 +33,7 @@ gemini = [
 [dependency-groups]
 dev = [
     "pytest>=8.4.1",
-    "mkdocs-material[imaging]>=9.6.20"
+    "mkdocs-material[imaging]>=9.6.20",
+    "mkdocs-macros-plugin>=1.5.0",
+    "mkdocs-table-reader-plugin>=3.1.0"
 ]

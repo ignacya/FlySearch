@@ -23,6 +23,10 @@ theme:
 plugins:
   - search
   - social
+  - macros:
+      module_name: docs/main
+  - table-reader:
+      data_path: "docs/data"
 repo_url: https://github.com/gmum/FlySearch
 repo_name: gmum/FlySearch
 markdown_extensions:
@@ -46,6 +50,10 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/gmum/FlySearch
+
+extra_javascript:
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - javascript/tablesort.js
 
 nav:
   - The benchmark: index.md
