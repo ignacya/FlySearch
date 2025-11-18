@@ -2,7 +2,7 @@
 
 site_name: "FlySearch: Exploring how vision-language models explore"
 site_description: "A benchmark for evaluating vision-language models in simulated 3D, outdoor, photorealistic environments."
-site_url: https://flysearch.pardyl.com
+site_url: https://flysearch.gmum.net/
 copyright: Copyright &copy; 2025 FlySearch authors
 theme:
   name: material
