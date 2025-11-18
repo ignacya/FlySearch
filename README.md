@@ -29,9 +29,7 @@ and the underlying codebase.
 ## Preview
 Objective: locate a fire, environment: city, model: GPT-4o.
 
-<video width="1280" height="720" controls autoplay muted loop>
-  <source src="https://flysearch.pardyl.com/imgs/preview.mp4" type="video/mp4">
-</video>
+https://github.com/user-attachments/assets/de057367-7a16-4329-8236-4e2c02c16e5f
 
 ## Dependencies
 
