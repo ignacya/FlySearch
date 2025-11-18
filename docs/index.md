@@ -17,6 +17,8 @@ hide:
 
 Adam Pardyl, Dominik Matuszek, Mateusz Przebieracz, Marek Cygan, Bartosz Zieliński, Maciej Wołczyk
 
+NeurIPS 2025 Datasets & Benchmarks Track
+
 [:material-trophy: Leaderboard](/#leaderboard){ .md-button .md-button--primary } [:material-attachment: Paper](https://arxiv.org/pdf/2506.02896){ .md-button }  [:material-github: Code](https://github.com/gmum/FlySearch){ .md-button }
 </div>
 
@@ -58,7 +60,7 @@ Objective: locate a fire, environment: city, model: GPT-4o.
 {{ render_leaderboard(df, groups, pretty) }}
 </div>
 
-The % Progress metric refers to the average completion percentage of FlySearch evaluation sets
+The Progress Overall (%) metric refers to the average completion percentage of all FlySearch evaluation sets
 (FS-1, FS-Anomaly, FS-2) by the model.
 
 !!! tip "Join the challenge"

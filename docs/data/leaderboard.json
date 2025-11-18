@@ -130,6 +130,19 @@
     "fs-2-city-std": 0.8
   },
   {
+    "model": "GPT-5",
+    "fs-1-forest": 57.3,
+    "fs-1-forest-std": 6.9,
+    "fs-1-city": 38.1,
+    "fs-1-city-std": 7.6,
+    "fs-anomaly-1-forest": 65.0,
+    "fs-anomaly-1-forest-std": 4.8,
+    "fs-anomaly-1-city": 24.0,
+    "fs-anomaly-1-city-std": 4.3,
+    "fs-2-city": 5.2,
+    "fs-2-city-std": 2.1
+  },
+  {
     "model": "Gemini 2.5 flash",
     "fs-1-forest": 47.4,
     "fs-1-forest-std": 8.1,

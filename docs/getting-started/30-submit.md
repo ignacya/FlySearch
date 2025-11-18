@@ -14,19 +14,14 @@ If you are interested in submitting your agent to the [FlySearch leaderboard](/#
     - `site`: URL/link to information about your agent (paper/pre-print/blog/repo; optional),
     - `date`: date of the experiment,
     - `logs`: link to a zip file with logs of FlySearch benchmark of you agent (default log location:
-      `all_logs/<run-name>` directory),
-3. Include instructions on how to reproduce your results.
-    - if your approach requires code changes consider opening a pull-request as in the next section,
-    - if your solution relies on paid (expensive) or non-public API access, we may ask you to email us with an API key
-      in order to
-      reproduce your results,
+      `all_logs/<run-name>` directory).
+3. Include instructions on how to reproduce your results. If your approach requires code changes consider opening a pull-request as in the next section.
 4. We will verify your submission is possible by running it both on public FlySearch set, and confirm the results on
-   separate secret
-   testing set.
+   separate secret testing set.
 
 Finally, if for some reason (e.g. intellectual property protection) it is not feasible to let us and others
 reproduce your results we may still add your agent to the leaderboard with an `unverified` annotation. However, we
-strongly prefer that even for non-public solution an API access is provided (can be privately shared with us by
+strongly encourage that even for non-public solution an API access to the agent is provided for verification (can be privately shared with us by
 email).
 
 ### Custom models and agentic frameworks
