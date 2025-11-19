@@ -1,4 +1,3 @@
-import base64
 import io
 import logging
 from time import sleep
@@ -22,6 +21,11 @@ class GeminiConversation(Conversation):
         self.top_p = top_p
         self.thinking_budget = thinking_budget
         self.logger = logging.getLogger(__name__)
+
+        self.chat = self.client.chats.create(
+            model=self.model_name,
+            config=self._get_generation_config()
+        )
 
         self.transaction_started = False
         self.transaction_role = None
@@ -59,8 +63,6 @@ class GeminiConversation(Conversation):
             raise Exception("Transaction not started")
 
         image = image.convert("RGB")
-        buffer = io.BytesIO()
-        image.save(buffer, format='JPEG', quality=95)
         
         content = self.transaction_conversation["content"]
 
@@ -89,22 +91,6 @@ class GeminiConversation(Conversation):
                         data=buffer.read(),
                         mime_type='image/jpeg'
                     ))
-                elif sub["type"] == "image_url":
-                    url = sub["image_url"]["url"]
-                    if url.startswith("data:image/"):
-                        try:
-                            base64_data = url.split(",", 1)[1]
-                            image_bytes = base64.b64decode(base64_data)
-                            # Determine mime type from data URL
-                            mime_type = url.split(";")[0].split(":")[1]
-                            parts.append(types.Part.from_bytes(
-                                data=image_bytes,
-                                mime_type=mime_type
-                            ))
-                        except Exception:
-                            parts.append(types.Part.from_text("[image]"))
-                    else:
-                        parts.append(types.Part.from_text(url))
                 else:
                     parts.append(types.Part.from_text("[unsupported content]"))
             return parts
@@ -120,32 +106,21 @@ class GeminiConversation(Conversation):
         if self.top_p is not None:
             config_dict["top_p"] = self.top_p
         if self.thinking_budget is not None:
-            config_dict["thinking_budget"] = self.thinking_budget
+            config_dict["thinking_config"] = types.ThinkingConfig(thinking_budget=self.thinking_budget)
         return types.GenerateContentConfig(**config_dict) if config_dict else None
 
-    def _send_message_with_retry(self, conversation_history):
+    def _send_message_with_retry(self, parts):
         retries = 3
         delay = 5  # seconds
         for i in range(retries):
             try:
-                generation_config = self._get_generation_config()
-                # Convert conversation history to contents format
-                contents = []
-                for msg in conversation_history:
-                    contents.append(types.Content(
-                        role=msg["role"],
-                        parts=msg["parts"]
-                    ))
-                
-                response = self.client.models.generate_content(
-                    model=self.model_name,
-                    contents=contents,
-                    config=generation_config
+                response = self.chat.send_message(
+                    message=parts
                 )
                 return response
             except (APIError, ServerError) as e:
-                # Using 429 for rate limiting, but being broad for other transient issues
-                if e.code in [429, 500, 503, 504]:
+                # Using 429 and 499 for rate limiting, but being broad for other transient issues
+                if e.code in [429, 499, 500, 503, 504]:
                     self.logger.warning(f"APIError received: {e}. Retrying in {delay} seconds...")
                     sleep(delay)
                     delay *= 2  # Exponential backoff
@@ -158,6 +133,8 @@ class GeminiConversation(Conversation):
         raise Exception("Failed to get response after multiple retries")
 
     def commit_transaction(self, send_to_vlm=False):
+        if not send_to_vlm:
+            raise NotImplementedError("GeminiConversation does not support commit_transaction with send_to_vlm=False")
         if not self.transaction_started:
             raise Exception("Transaction not started")
 
@@ -173,21 +150,23 @@ class GeminiConversation(Conversation):
         if role == Role.ASSISTANT and send_to_vlm:
             raise Exception("Assistant cannot send messages to VLM")
 
-        if not send_to_vlm:
-            return
-        
-        gemini_history = []
-        for msg in self.conversation:
-            role = "user" if msg["role"] == "user" else "model"
-            parts = self._to_gemini_parts(msg["content"])
-            gemini_history.append({
-                "role": role,
-                "parts": parts
-            })
 
-        response = self._send_message_with_retry(gemini_history)
+        # Get the message parts from the just committed message
+        msg = self.conversation[-1]
+        parts = self._to_gemini_parts(msg["content"])
+
+        response = self._send_message_with_retry(parts)
         
-        response_content = str(response.text)
+        try:
+            # Try to get text directly, which might log a warning if there are non-text parts (thoughts)
+            response_content = str(response.text)
+        except ValueError:
+            # If strictly no text part is found or we want to handle parts manually
+            response_content = ""
+            if response.candidates and response.candidates[0].content.parts:
+                for part in response.candidates[0].content.parts:
+                    if part.text:
+                        response_content += part.text
         
         self.logger.info(f"LLM response: {response_content}")
 
@@ -219,11 +198,8 @@ class GeminiConversation(Conversation):
                     for submessage in content:
                         if submessage["type"] == "text":
                             yield role, submessage["text"]
-                        elif submessage["type"] == "image_url":
-                            if save_urls:
-                                yield role, submessage["image_url"]
-                            else:
-                                yield role, "image"
+                        elif submessage["type"] == "image":
+                            yield role, "image"
                 else:
                     raise Exception("Invalid content type")
 
