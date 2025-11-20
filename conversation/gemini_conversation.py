@@ -157,16 +157,7 @@ class GeminiConversation(Conversation):
 
         response = self._send_message_with_retry(parts)
         
-        try:
-            # Try to get text directly, which might log a warning if there are non-text parts (thoughts)
-            response_content = str(response.text)
-        except ValueError:
-            # If strictly no text part is found or we want to handle parts manually
-            response_content = ""
-            if response.candidates and response.candidates[0].content.parts:
-                for part in response.candidates[0].content.parts:
-                    if part.text:
-                        response_content += part.text
+        response_content = str(response.text)
         
         self.logger.info(f"LLM response: {response_content}")
 

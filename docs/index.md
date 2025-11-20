@@ -1,5 +1,4 @@
 ---
-title: The benchmark
 hide:
   - toc
   - navigation
